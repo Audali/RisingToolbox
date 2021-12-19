@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Costcalculator from '../views/Costcalculator.vue'
+import Planner from '../views/Planner.vue'
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     path: '/costcalculator',
     name: 'CostCalculator',
     component: Costcalculator
+  },
+  {
+    path: '/planner',
+    name: 'Planner',
+    component: Planner
   },
 ]
 

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px"
+	 height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+<g id="cadre_x5F_open">
+</g>
+<g id="cadre_x5F_dome">
+</g>
+<g id="cadre_x5F_orbital">
+</g>
+<g id="infra_x5F_open">
+</g>
+<g id="infra_x5F_dome">
+</g>
+<g id="mine_x5F_dome">
+</g>
+<g id="mine_x5F_orbital">
+</g>
+<g id="hab_x5F_open">
+</g>
+<g id="hab_x5F_dome">
+</g>
+<g id="hab_x5F_open_x5F_poor">
+</g>
+<g id="hab_x5F_open_x5F_rich">
+</g>
+<g id="factory_x5F_open">
+</g>
+<g id="factory_x5F_orbital">
+</g>
+<g id="hight_x5F_factory_x5F_dome">
+</g>
+<g id="lift_x5F_open">
+</g>
+<g id="lift_x5F_dome">
+</g>
+<g id="university_x5F_open">
+</g>
+<g id="research_x5F_open">
+</g>
+<g id="research_x5F_dome">
+</g>
+<g id="research_x5F_orbital">
+</g>
+<g id="ideo_x5F_open">
+</g>
+<g id="ideo_x5F_dome">
+</g>
+<g id="monument_x5F_open">
+</g>
+<g id="monument_x5F_dome">
+</g>
+<g id="ideo_x5F_credit_x5F_open">
+</g>
+<g id="market_x5F_open">
+</g>
+<g id="market_x5F_dome">
+</g>
+<g id="finance_x5F_open">
+	<polygon points="16.177,29.53 2.47,15.823 15.823,2.47 16.53,3.177 3.884,15.823 16.177,28.116 28.823,15.47 29.53,16.177 	"/>
+	<path d="M6.677,26.323c-0.256,0-0.512-0.098-0.707-0.293c-0.391-0.391-0.391-1.023,0-1.414l2.5-2.5
+		c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414l-2.5,2.5C7.188,26.226,6.933,26.323,6.677,26.323z"/>
+	<path d="M9.177,9.823c-0.256,0-0.512-0.098-0.707-0.293l-2.5-2.5c-0.391-0.391-0.391-1.023,0-1.414s1.023-0.391,1.414,0l2.5,2.5
+		c0.391,0.391,0.391,1.023,0,1.414C9.688,9.726,9.433,9.823,9.177,9.823z"/>
+	<path d="M25.677,26.323c-0.256,0-0.512-0.098-0.707-0.293l-2.5-2.5c-0.391-0.391-0.391-1.023,0-1.414s1.023-0.391,1.414,0l2.5,2.5
+		c0.391,0.391,0.391,1.023,0,1.414C26.188,26.226,25.933,26.323,25.677,26.323z"/>
+	<g>
+		<polygon points="8.177,20.823 8.177,18.823 7.177,19.823 		"/>
+		<polygon points="8.677,21.323 11.177,23.823 11.177,15.823 8.677,18.323 		"/>
+		<polygon points="11.677,24.323 14.177,26.823 14.177,17.323 11.677,14.823 		"/>
+		<polygon points="14.677,27.323 16.177,28.823 17.177,27.823 17.177,19.823 14.677,17.323 		"/>
+		<polygon points="17.677,27.323 20.177,24.823 20.177,16.823 17.677,19.323 		"/>
+	</g>
+	<path d="M17.177,20.53l-5-5L7.53,20.177c-0.195,0.195-0.512,0.195-0.707,0s-0.195-0.512,0-0.707l5.354-5.354l5,5l5.646-5.646
+		c0.195-0.195,0.512-0.195,0.707,0s0.195,0.512,0,0.707L17.177,20.53z"/>
+	<polygon points="23.177,21.823 20.677,24.323 20.677,16.323 23.177,13.823 	"/>
+	<g id="Open_15_">
+		<polygon points="4.5,32 0,32 0,27.5 1,27.5 1,31 4.5,31 		"/>
+		<polygon points="32,32 27.5,32 27.5,31 31,31 31,27.5 32,27.5 		"/>
+		<polygon points="32,4.5 31,4.5 31,1 27.5,1 27.5,0 32,0 		"/>
+		<polygon points="1,4.5 0,4.5 0,0 4.5,0 4.5,1 1,1 		"/>
+	</g>
+</g>
+<g id="finance_x5F_orbital">
+</g>
+<g id="spatioport_x5F_open">
+</g>
+<g id="spatioport_x5F_dome">
+</g>
+<g id="spatioport_x5F_orbital">
+</g>
+<g id="defense_x5F_global_x5F_dome">
+</g>
+<g id="defense_x5F_local_x5F_open">
+</g>
+<g id="defense_x5F_local_x5F_dome">
+</g>
+<g id="defense_x5F_local_x5F_orbital">
+</g>
+<g id="happy_x5F_pot_x5F_open">
+</g>
+<g id="happy_x5F_pot_x5F_dome">
+</g>
+<g id="happy_x5F_pot_x5F_orbital">
+</g>
+<g id="happy_x5F_open">
+</g>
+<g id="happy_x5F_orbital">
+</g>
+<g id="shipyard_x5F_1_x5F_orbital">
+</g>
+<g id="shipyard_x5F_2_x5F_orbital">
+</g>
+<g id="shipyard_x5F_3_x5F_orbital">
+</g>
+<g id="shipyard_x5F_4_x5F_orbital">
+</g>
+<g id="military_x5F_school_x5F_dome">
+</g>
+<g id="radar_x5F_orbital">
+</g>
+<g id="counterintelligence_x5F_open">
+</g>
+<g id="removecontact_x5F_open">
+	<g id="cadre_x5F_open_-_copie_36_11_">
+	</g>
+</g>
+<g id="removecontact_x5F_dome">
+</g>
+<g id="hypergate">
+</g>
+<g id="cadre_x5F_brevet">
+</g>
+<g id="cadre_x5F_lex">
+</g>
+<g id="_x30_0_x5F_galaxy">
+</g>
+<g id="_x30_0_x5F_vision">
+</g>
+</svg>

@@ -19,7 +19,7 @@ export default {
       // Route list for navbar
       routeList: [
         { name: "Home", route: "/" },
-        { name: "Placeholder", route: "/" },
+        { name: "Planner", route: "/planner" },
         { name: "Cost calculator", route: "/costcalculator" },
       ],
     };

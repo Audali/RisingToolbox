@@ -12,7 +12,7 @@
         />
       </td>
       <td>
-        <img src="@/assets/technology.svg" alt="Credit" />
+        <img src="@/assets/technology.svg" alt="Technology" />
         <input
           type="number"
           class="inputProd"
@@ -22,7 +22,7 @@
         />
       </td>
       <td>
-        <img src="@/assets/ideology.svg" alt="Credit" />
+        <img src="@/assets/ideology.svg" alt="Ideology" />
         <input
           type="number"
           class="inputProd"
@@ -32,7 +32,7 @@
         />
       </td>
       <td>
-        <img src="@/assets/production.svg" alt="Credit" />
+        <img src="@/assets/production.svg" alt="Production" />
         <input
           type="number"
           class="inputProd"
@@ -69,21 +69,21 @@
               ref="production1"
               @click="setProduction(1)"
             >
-              <img src="@/assets/technology.svg" alt="Credit" />
+              <img src="@/assets/technology.svg" alt="Technology" />
             </button>
             <button
               class="inactive_button"
               ref="production2"
               @click="setProduction(2)"
             >
-              <img src="@/assets/ideology.svg" alt="Credit" />
+              <img src="@/assets/ideology.svg" alt="Ideology" />
             </button>
             <button
               class="inactive_button"
               ref="production3"
               @click="setProduction(3)"
             >
-              <img src="@/assets/production.svg" alt="Credit" />
+              <img src="@/assets/production.svg" alt="Production" />
             </button>
           </td>
           <td>
