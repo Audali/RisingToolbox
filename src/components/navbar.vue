@@ -36,7 +36,8 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: rgb(11,11,11);
+  /* background-color: #333; */
   top: 0;
   width: 100%;
 }

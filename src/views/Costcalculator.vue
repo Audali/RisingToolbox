@@ -1,8 +1,10 @@
 <template>
   <div class="card">
-    <table style="display: inline-block">
+    <table class="tableProd">
       <td>
-        <img src="@/assets/credit.svg" class="iconProd" alt="Credit" />
+        <img src="@/assets/credit_light.svg" class="iconProd" alt="Credit" />
+      </td>
+      <td>
         <input
           type="number"
           class="inputProd"
@@ -12,7 +14,13 @@
         />
       </td>
       <td>
-        <img src="@/assets/technology.svg" class="iconProd" alt="Technology" />
+        <img
+          src="@/assets/technology_light.svg"
+          class="iconProd"
+          alt="Technology"
+        />
+      </td>
+      <td>
         <input
           type="number"
           class="inputProd"
@@ -22,7 +30,13 @@
         />
       </td>
       <td>
-        <img src="@/assets/ideology.svg" class="iconProd" alt="Ideology" />
+        <img
+          src="@/assets/ideology_light.svg"
+          class="iconProd"
+          alt="Ideology"
+        />
+      </td>
+      <td>
         <input
           type="number"
           class="inputProd"
@@ -32,7 +46,13 @@
         />
       </td>
       <td>
-        <img src="@/assets/production.svg" class="iconProd" alt="Production" />
+        <img
+          src="@/assets/production_light.svg"
+          class="iconProd"
+          alt="Production"
+        />
+      </td>
+      <td>
         <input
           type="number"
           class="inputProd"
@@ -43,15 +63,16 @@
       </td>
     </table>
     <br />
+    <br />
     <table class="tableLeveling" style="display: inline-block">
       <thead>
         <tr>
           <th>Prod:</th>
           <th>Goal:</th>
           <th>Current:</th>
-          <th></th>
+          <th style="padding-left: 1.5rem;"></th>
           <th>Time:</th>
-          <th>Date:</th>
+          <th style="padding-left: 3.5rem; padding-right: 3.5rem;">Date:</th>
         </tr>
       </thead>
       <tbody>
@@ -256,18 +277,36 @@ export default {
   width: 3.5rem;
 }
 .active_button {
-  background-color: #04a5db;
+  background-color: #8e60bf;
+  border: solid 2px #8e60bf;
+  margin: 0.2rem;
+  border-radius: 15%;
 }
 .active_button:hover {
-  background-color: #0482ac;
+  background-color: #8752c0;
 }
 .inactive_button {
-  background-color: #868686;
+  background-color: #e6e6e5;
+  border: solid 1px rgb(80, 80, 80);
+  margin: 0.2rem;
+  border-radius: 15%;
 }
 .inactive_button:hover {
-  background-color: #52788b;
+  background-color: #8752c0;
 }
 .iconProd {
   width: 1.5rem;
+  vertical-align: bottom;
+}
+.inputProd {
+  width: 5rem;
+  height: 1.5rem;
+  font-size: medium;
+}
+.tableProd {
+  display: inline-block;
+  background-color: rgb(21 23 27);
+  padding: 1rem;
+  border-radius: 1rem;
 }
 </style>
