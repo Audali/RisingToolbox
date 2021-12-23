@@ -139,10 +139,21 @@ export default {
             this.productions[this.pickedProduction]) *
           3 *
           60;
-        this.timeNeeded = new Date(productionTime * 1000)
-          .toISOString()
-          .substr(11, 8);
+
+        var seconds = parseInt(productionTime);
+        var days = Math.floor(seconds / (3600 * 24));
+        seconds -= days * 3600 * 24;
+        var hrs = Math.floor(seconds / 3600);
+        seconds -= hrs * 3600;
+        var mnts = Math.floor(seconds / 60);
+        seconds -= mnts * 60;
+        if (seconds < 10) seconds = "0" + seconds.toString();
+
+        this.timeNeeded = days + "d " + hrs + ":" + mnts + ":" + seconds;
+
         var endTime = new Date(Date.now() + productionTime * 1000);
+
+        let month = endTime.getMonth() + 1;
         this.endDate =
           endTime.getHours() +
           "h" +
@@ -151,13 +162,13 @@ export default {
           endTime.getSeconds() +
           "s" +
           " " +
-          endTime.getDay() +
+          endTime.getDate() +
           "/" +
-          endTime.getMonth();
+          month;
       }
     },
     setProduction(newProduction) {
-      console.log(newProduction);
+      // console.log(newProduction);
       this.replaceActiveButton("production" + this.pickedProduction);
       this.pickedProduction = newProduction;
       this.calculateProductionTime();
