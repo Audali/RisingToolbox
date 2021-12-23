@@ -2,7 +2,7 @@
   <div class="card">
     <table style="display: inline-block">
       <td>
-        <img src="@/assets/credit.svg" alt="Credit" />
+        <img src="@/assets/credit.svg" class="iconProd" alt="Credit" />
         <input
           type="number"
           class="inputProd"
@@ -12,7 +12,7 @@
         />
       </td>
       <td>
-        <img src="@/assets/technology.svg" alt="Technology" />
+        <img src="@/assets/technology.svg" class="iconProd" alt="Technology" />
         <input
           type="number"
           class="inputProd"
@@ -22,7 +22,7 @@
         />
       </td>
       <td>
-        <img src="@/assets/ideology.svg" alt="Ideology" />
+        <img src="@/assets/ideology.svg" class="iconProd" alt="Ideology" />
         <input
           type="number"
           class="inputProd"
@@ -32,7 +32,7 @@
         />
       </td>
       <td>
-        <img src="@/assets/production.svg" alt="Production" />
+        <img src="@/assets/production.svg" class="iconProd" alt="Production" />
         <input
           type="number"
           class="inputProd"
@@ -55,59 +55,71 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr v-for="(line, index) in calculatorLine" :key="index">
           <td>
             <button
               class="active_button"
-              ref="production0"
-              @click="setProduction(0)"
+              :ref="'production' + index + '0'"
+              @click="setProduction(index, 0)"
             >
-              <img src="@/assets/credit.svg" alt="Credit" />
+              <img src="@/assets/credit.svg" class="iconProd" alt="Credit" />
             </button>
             <button
               class="inactive_button"
-              ref="production1"
-              @click="setProduction(1)"
+              :ref="'production' + index + '1'"
+              @click="setProduction(index, 1)"
             >
-              <img src="@/assets/technology.svg" alt="Technology" />
+              <img
+                src="@/assets/technology.svg"
+                class="iconProd"
+                alt="Technology"
+              />
             </button>
             <button
               class="inactive_button"
-              ref="production2"
-              @click="setProduction(2)"
+              :ref="'production' + index + '2'"
+              @click="setProduction(index, 2)"
             >
-              <img src="@/assets/ideology.svg" alt="Ideology" />
+              <img
+                src="@/assets/ideology.svg"
+                class="iconProd"
+                alt="Ideology"
+              />
             </button>
             <button
               class="inactive_button"
-              ref="production3"
-              @click="setProduction(3)"
+              :ref="'production' + index + '3'"
+              @click="setProduction(index, 3)"
             >
-              <img src="@/assets/production.svg" alt="Production" />
+              <img
+                src="@/assets/production.svg"
+                class="iconProd"
+                alt="Production"
+              />
             </button>
           </td>
           <td>
             <input
               type="number"
               min="0"
-              v-model="goal"
-              @change="calculateProductionTime()"
+              v-model="line.goal"
+              @change="calculateProductionTime(index)"
             />
           </td>
           <td>
             <input
               type="number"
               min="0"
-              v-model="current"
-              @change="calculateProductionTime()"
+              v-model="line.current"
+              @change="calculateProductionTime(index)"
             />
           </td>
           <td />
           <td>
-            {{ timeNeeded }}
+            {{ line.timeNeeded }}
           </td>
           <td>
-            {{ endDate }}
+            {{ line.endDate }}
           </td>
         </tr>
       </tbody>
@@ -125,18 +137,58 @@ export default {
       current: 0,
       timeNeeded: 0,
       endDate: 0,
-      prod: 100,
+      calculatorLine: [
+        {
+          pickedProduction: 0,
+          goal: 1000,
+          current: 0,
+          timeNeeded: 0,
+          endDate: 0,
+        },
+        {
+          pickedProduction: 0,
+          goal: 1000,
+          current: 0,
+          timeNeeded: 0,
+          endDate: 0,
+        },
+        {
+          pickedProduction: 0,
+          goal: 1000,
+          current: 0,
+          timeNeeded: 0,
+          endDate: 0,
+        },
+        {
+          pickedProduction: 0,
+          goal: 1000,
+          current: 0,
+          timeNeeded: 0,
+          endDate: 0,
+        },
+        {
+          pickedProduction: 0,
+          goal: 1000,
+          current: 0,
+          timeNeeded: 0,
+          endDate: 0,
+        }
+      ],
     };
   },
   methods: {
-    calculateProductionTime() {
-      if (this.goal < this.current) {
-        this.timeNeeded = "Done";
-        this.endDate = "---";
+    calculateProductionTime(lineIndex) {
+      if (
+        this.calculatorLine[lineIndex].goal <
+        this.calculatorLine[lineIndex].current
+      ) {
+        this.calculatorLine[lineIndex].timeNeeded = "Done";
+        this.calculatorLine[lineIndex].endDate = "---";
       } else {
         var productionTime =
-          ((this.goal - this.current) /
-            this.productions[this.pickedProduction]) *
+          ((this.calculatorLine[lineIndex].goal -
+            this.calculatorLine[lineIndex].current) /
+            this.productions[this.calculatorLine[lineIndex].pickedProduction]) *
           3 *
           60;
 
@@ -149,12 +201,13 @@ export default {
         seconds -= mnts * 60;
         if (seconds < 10) seconds = "0" + seconds.toString();
 
-        this.timeNeeded = days + "d " + hrs + ":" + mnts + ":" + seconds;
+        this.calculatorLine[lineIndex].timeNeeded =
+          days + "d " + hrs + ":" + mnts + ":" + seconds;
 
         var endTime = new Date(Date.now() + productionTime * 1000);
 
         let month = endTime.getMonth() + 1;
-        this.endDate =
+        this.calculatorLine[lineIndex].endDate =
           endTime.getHours() +
           "h" +
           endTime.getMinutes() +
@@ -167,30 +220,37 @@ export default {
           month;
       }
     },
-    setProduction(newProduction) {
-      // console.log(newProduction);
-      this.replaceActiveButton("production" + this.pickedProduction);
-      this.pickedProduction = newProduction;
-      this.calculateProductionTime();
-      this.replaceInactiveButton("production" + newProduction);
+    setProduction(lineIndex, newProduction) {
+      this.replaceActiveButton(
+        "production" +
+          lineIndex +
+          this.calculatorLine[lineIndex].pickedProduction
+      );
+      this.calculatorLine[lineIndex].pickedProduction = newProduction;
+      this.calculateProductionTime(lineIndex);
+      this.replaceInactiveButton("production" + lineIndex + newProduction);
     },
     // Replace active button class to inactive button class on given ref
     replaceActiveButton(refToSwap) {
-      this.$refs[refToSwap].classList.replace(
+      this.$refs[refToSwap][0].classList.replace(
         "active_button",
         "inactive_button"
       );
     },
     // Replace inactive button class to active button class on given ref
     replaceInactiveButton(refToSwap) {
-      this.$refs[refToSwap].classList.replace(
+      this.$refs[refToSwap][0].classList.replace(
         "inactive_button",
         "active_button"
       );
     },
   },
   mounted() {
-    this.calculateProductionTime();
+    this.calculateProductionTime(0);
+    this.calculateProductionTime(1);
+    this.calculateProductionTime(2);
+    this.calculateProductionTime(3);
+    this.calculateProductionTime(4);
   },
 };
 </script>
@@ -209,5 +269,8 @@ export default {
 }
 .inactive_button:hover {
   background-color: #52788b;
+}
+.iconProd {
+  width: 1.5rem;
 }
 </style>
