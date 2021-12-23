@@ -17,9 +17,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
 }
 body {
   background-color: rgb(30, 30, 30);
+  height: 100%;
   margin: 0;
 }
 
@@ -30,12 +32,15 @@ body {
     transition: 0.3s;
     padding: 1rem;
     margin: 1rem;
+    height: 100%;
     width: 75%;
     display: inline-block;
     background-color: #393939;
     border-radius: 0.5rem;
     color: azure;
     font-size: large;
+    /* display: block; */
+    /* overflow: auto; */
   }
 }
 

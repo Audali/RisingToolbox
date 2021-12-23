@@ -30,7 +30,6 @@
                 v-for="(building, index) in planet.buildings"
                 :key="index"
               >
-                <!-- {{building.image}} -->
                 <button
                   class="active_button"
                   :ref="'production' + building"
@@ -46,7 +45,7 @@
               </td>
             </tr>
             <tr>
-              <td/>
+              <td />
               <td>
                 <button class="active_button" @click="addPlanet('habitable')">
                   <img
@@ -95,7 +94,6 @@
                   :ref="'production' + building"
                   @click="setBuilding(building)"
                 >
-                  <!-- {{ building.name }} -->
                   <img
                     :src="
                       require('@/assets/building/' + building.image + '.svg')
@@ -112,7 +110,6 @@
   </div>
 </template>
 <script>
-// import svgfile from "../assets/credit.svg"
 export default {
   name: "Planner",
   data() {
@@ -205,29 +202,37 @@ export default {
       sterileBuildingList: [
         {
           idLine: 0,
-          buildings: [{ name: 1, image: "mine_dome" },
-          { name: 2, image: "high_factory_dome" },
-          { name: 3, image: "lift_open" },
-          { name: 4, image: "research_open" }]
+          buildings: [
+            { name: 1, image: "mine_dome" },
+            { name: 2, image: "high_factory_dome" },
+            { name: 3, image: "lift_open" },
+            { name: 4, image: "research_open" },
+          ],
         },
         {
           idLine: 1,
-          buildings: [{ name: 1, image: "hab_open" },
-          { name: 2, image: "ideo_open" },
-          { name: 3, image: "market_open" }]
+          buildings: [
+            { name: 1, image: "hab_open" },
+            { name: 2, image: "ideo_open" },
+            { name: 3, image: "market_open" },
+          ],
         },
         {
           idLine: 2,
-          buildings: [{ name: 1, image: "monument_open" },
-          { name: 2, image: "spatioport_open" },
-          { name: 3, image: "happy_pot_open" }]
+          buildings: [
+            { name: 1, image: "monument_open" },
+            { name: 2, image: "spatioport_open" },
+            { name: 3, image: "happy_pot_open" },
+          ],
         },
         {
           idLine: 3,
-          buildings: [{ name: 1, image: "defense_global_dome" },
-          { name: 2, image: "defense_local_open" },
-          { name: 3, image: "military_school_dome" },
-          { name: 4, image: "removecontact_open" }]
+          buildings: [
+            { name: 1, image: "defense_global_dome" },
+            { name: 2, image: "defense_local_open" },
+            { name: 3, image: "military_school_dome" },
+            { name: 4, image: "removecontact_open" },
+          ],
         },
       ],
       buildListToDisplay: [],
@@ -272,7 +277,7 @@ export default {
       if (newPlanetType === "moon" || newPlanetType === "asteroid")
         tileNumber = 3;
       else {
-        tileNumber = 8;
+        tileNumber = 7;
         emptyBuildings.push({ name: 0, image: "infra_dome" });
       }
       this.system.push({
@@ -311,10 +316,6 @@ export default {
           }
         }
         this.selectedTile = [planetId, tileId, newPlanetType];
-        // console.log(
-        //   "selectedTile : " + this.selectedTile[0] + "," + this.selectedTile[1],
-        //   newPlanetType
-        // );
       }
     },
     // Replace active button class to inactive button class on given ref
@@ -333,7 +334,6 @@ export default {
     },
   },
   mounted() {
-    // this.calculateProductionTime();
     this.buildListToDisplay = this.habitableBuildingList;
     this.setUpSystem();
   },
@@ -362,19 +362,17 @@ td {
 }
 .container {
   width: 100%;
-  height: 200px;
   margin: auto;
   padding: 10px;
 }
 
 .leftDiv {
   width: 50%;
-  height: 200px;
   float: left;
 }
 
 .rightDiv {
-  height: 200px;
+  display: inline-block;
 }
 img {
   width: 2.3rem;
