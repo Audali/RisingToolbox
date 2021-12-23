@@ -8,7 +8,7 @@
           class="inputProd"
           v-model="productions[0]"
           min="1"
-          @change="calculateProductionTime()"
+          @change="updateAllProduction()"
         />
       </td>
       <td>
@@ -18,7 +18,7 @@
           class="inputProd"
           v-model="productions[1]"
           min="1"
-          @change="calculateProductionTime()"
+          @change="updateAllProduction()"
         />
       </td>
       <td>
@@ -28,7 +28,7 @@
           class="inputProd"
           v-model="productions[2]"
           min="1"
-          @change="calculateProductionTime()"
+          @change="updateAllProduction()"
         />
       </td>
       <td>
@@ -38,7 +38,7 @@
           class="inputProd"
           v-model="productions[3]"
           min="1"
-          @change="calculateProductionTime()"
+          @change="updateAllProduction()"
         />
       </td>
     </table>
@@ -132,11 +132,6 @@ export default {
   data() {
     return {
       productions: [100, 100, 100, 100],
-      pickedProduction: 0,
-      goal: 1000,
-      current: 0,
-      timeNeeded: 0,
-      endDate: 0,
       calculatorLine: [
         {
           pickedProduction: 0,
@@ -172,7 +167,7 @@ export default {
           current: 0,
           timeNeeded: 0,
           endDate: 0,
-        }
+        },
       ],
     };
   },
@@ -200,6 +195,7 @@ export default {
         var mnts = Math.floor(seconds / 60);
         seconds -= mnts * 60;
         if (seconds < 10) seconds = "0" + seconds.toString();
+        if (mnts < 10) mnts = "0" + mnts.toString();
 
         this.calculatorLine[lineIndex].timeNeeded =
           days + "d " + hrs + ":" + mnts + ":" + seconds;
@@ -230,6 +226,11 @@ export default {
       this.calculateProductionTime(lineIndex);
       this.replaceInactiveButton("production" + lineIndex + newProduction);
     },
+    updateAllProduction() {
+      for (let i = 0; i < this.calculatorLine.length; i++) {
+        this.calculateProductionTime(i);
+      }
+    },
     // Replace active button class to inactive button class on given ref
     replaceActiveButton(refToSwap) {
       this.$refs[refToSwap][0].classList.replace(
@@ -246,11 +247,7 @@ export default {
     },
   },
   mounted() {
-    this.calculateProductionTime(0);
-    this.calculateProductionTime(1);
-    this.calculateProductionTime(2);
-    this.calculateProductionTime(3);
-    this.calculateProductionTime(4);
+    this.updateAllProduction();
   },
 };
 </script>
