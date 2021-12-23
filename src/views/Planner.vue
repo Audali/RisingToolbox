@@ -46,6 +46,7 @@
               </td>
             </tr>
             <tr>
+              <td/>
               <td>
                 <button class="active_button" @click="addPlanet('habitable')">
                   <img
