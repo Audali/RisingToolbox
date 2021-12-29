@@ -67,12 +67,14 @@
     <table class="tableLeveling" style="display: inline-block">
       <thead>
         <tr>
-          <th>Prod:</th>
-          <th>Goal:</th>
-          <th>Current:</th>
-          <th style="padding-left: 1.5rem;"></th>
-          <th>Time:</th>
-          <th style="padding-left: 3.5rem; padding-right: 3.5rem;">Date:</th>
+          <th>{{ $t("prod") }}:</th>
+          <th>{{ $t("goal") }}:</th>
+          <th>{{ $t("currentStock") }}:</th>
+          <th style="padding-left: 1.5rem"></th>
+          <th>{{ $t("time") }}:</th>
+          <th style="padding-left: 3.5rem; padding-right: 3.5rem">
+            {{ $t("date") }}:
+          </th>
         </tr>
       </thead>
       <tbody>

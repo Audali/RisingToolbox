@@ -5,7 +5,7 @@
         <table style="display: inline-block">
           <thead>
             <tr>
-              <th colspan="10">System:</th>
+              <th colspan="10">{{ $t("system") }}:</th>
             </tr>
           </thead>
           <tbody>
@@ -83,7 +83,7 @@
         <table class="tableLeveling">
           <thead>
             <tr>
-              <th colspan="4">Buildings:</th>
+              <th colspan="4">{{ $t("buildings") }}:</th>
             </tr>
           </thead>
           <tbody>
