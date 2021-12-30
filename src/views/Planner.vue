@@ -2,7 +2,7 @@
   <div class="card">
     <section class="container">
       <div class="leftDiv">
-        <table style="display: inline-block">
+        <table style="display: inline-block; float: left">
           <thead>
             <tr>
               <th colspan="1">{{ system.workforce }}/X</th>
@@ -16,6 +16,38 @@
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td />
+              <td>
+                <button class="active_button" @click="addPlanet('habitable')">
+                  <img
+                    :src="require('@/assets/system/habitable.svg')"
+                    alt="habitable"
+                  />
+                </button>
+              </td>
+              <td>
+                <button class="active_button" @click="addPlanet('sterile')">
+                  <img
+                    :src="require('@/assets/system/sterile.svg')"
+                    alt="sterile"
+                  />
+                </button>
+              </td>
+              <td>
+                <button class="active_button" @click="addPlanet('moon')">
+                  <img :src="require('@/assets/system/moon.svg')" alt="moon" />
+                </button>
+              </td>
+              <td>
+                <button class="active_button" @click="addPlanet('asteroid')">
+                  <img
+                    :src="require('@/assets/system/asteroid.svg')"
+                    alt="asteroid"
+                  />
+                </button>
+              </td>
+            </tr>
             <tr v-for="planet in system.planets" :key="planet.planetId">
               <div style="position: relative; width: 100%">
                 <img
@@ -47,38 +79,6 @@
                       require('@/assets/building/' + building.image + '.svg')
                     "
                     :alt="building.image"
-                  />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td />
-              <td>
-                <button class="active_button" @click="addPlanet('habitable')">
-                  <img
-                    :src="require('@/assets/system/habitable.svg')"
-                    alt="habitable"
-                  />
-                </button>
-              </td>
-              <td>
-                <button class="active_button" @click="addPlanet('sterile')">
-                  <img
-                    :src="require('@/assets/system/sterile.svg')"
-                    alt="sterile"
-                  />
-                </button>
-              </td>
-              <td>
-                <button class="active_button" @click="addPlanet('moon')">
-                  <img :src="require('@/assets/system/moon.svg')" alt="moon" />
-                </button>
-              </td>
-              <td>
-                <button class="active_button" @click="addPlanet('asteroid')">
-                  <img
-                    :src="require('@/assets/system/asteroid.svg')"
-                    alt="asteroid"
                   />
                 </button>
               </td>
