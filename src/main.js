@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { createI18n } from 'vue-i18n/index'
-import VueCookies from "vue3-cookies";
+import { VueCookieNext } from "vue-cookie-next";
 
 // Import locales
 import enLocales from "./locales/en.json";
@@ -20,12 +20,14 @@ const i18n = createI18n({
 const app = createApp(App)
 app.use(router)
 app.use(i18n)
-app.use(VueCookies, {
-    expireTimes: "2m",
-    path: "/",
-    domain: "",
-    secure: true,
-    sameSite: "None"
-});
+app.use(VueCookieNext)
+// app.use(VueCookies, {
+//     expireTimes: "2m",
+//     path: "/",
+//     domain: "",
+//     secure: true,
+//     sameSite: "None"
+// });
 
 app.mount('#app')
+VueCookieNext.config({ expire: '2m' })

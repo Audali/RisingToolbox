@@ -44,7 +44,7 @@ export default {
       if (newLang !== this.$i18n.locale) {
         this.replaceActiveButton(this.$i18n.locale);
         this.$i18n.locale = newLang;
-        this.$cookies.set("locale", newLang, 60 * 60 * 24);
+        this.$cookie.setCookie("locale", newLang);
 
         this.routeList.forEach((elem) => {
           elem.name = this.$t(elem.i18name);
@@ -69,10 +69,10 @@ export default {
   },
   mounted() {
     // Check if localization cookie exists and set the language accordingly
-    if (this.$cookies.isKey("locale")) {
-      this.setLanguage(this.$cookies.get("locale"));
+    if (this.$cookie.isCookieAvailable("locale")) {
+      this.setLanguage(this.$cookie.getCookie("locale"));
     } else {
-      this.$cookies.set("locale", "en", 60 * 60 * 24);
+      this.$cookie.setCookie("locale", "en");
     }
   },
 };
