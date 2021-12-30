@@ -291,15 +291,14 @@ export default {
     // Add planet to the planet list
     addPlanet(newPlanetType) {
       let tileNumber;
-      let newPlanetId =
-        this.system.planets[this.system.planets.length - 1].planetId + 1;
+      let newPlanetId = this.system.planets.length;
       let emptyBuildings = [];
       if (newPlanetType === "moon" || newPlanetType === "asteroid")
         tileNumber = 3;
       else {
         tileNumber = 7;
         emptyBuildings.push({ name: 0, image: "infra_dome", workforce: 2 });
-        this.system.workforce += 1;
+        this.system.workforce += 2;
       }
       this.system.planets.push({
         planetId: newPlanetId,
