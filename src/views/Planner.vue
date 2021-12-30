@@ -298,7 +298,7 @@ export default {
         tileNumber = 3;
       else {
         tileNumber = 7;
-        emptyBuildings.push({ name: 0, image: "infra_dome", workforce: 1 });
+        emptyBuildings.push({ name: 0, image: "infra_dome", workforce: 2 });
         this.system.workforce += 1;
       }
       this.system.planets.push({
