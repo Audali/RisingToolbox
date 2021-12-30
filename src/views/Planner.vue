@@ -114,7 +114,7 @@ export default {
   name: "Planner",
   data() {
     return {
-      selectedTile: [0, 0, "habitable"],
+      selectedTile: [0, 1, "habitable"],
       emptyBuilding: { name: "Empty", image: "empty" },
       stellarBuildingList: [
         {
@@ -256,6 +256,7 @@ export default {
     };
   },
   methods: {
+    // Add building slots to the default system
     setUpSystem() {
       this.system[0].buildings.push({ name: 0, image: "infra_dome" });
       for (let i = 1; i < 8; i++) {
@@ -265,11 +266,11 @@ export default {
       for (let i = 1; i < 8; i++) {
         this.system[1].buildings.push(this.emptyBuilding);
       }
-      this.system[2].buildings.push({ name: 0, image: "infra_dome" });
-      for (let i = 1; i < 3; i++) {
+      for (let i = 0; i < 3; i++) {
         this.system[2].buildings.push(this.emptyBuilding);
       }
     },
+    // Add planet to the planet list
     addPlanet(newPlanetType) {
       let tileNumber;
       let newPlanetId = this.system[this.system.length - 1].planetId + 1;
@@ -289,6 +290,7 @@ export default {
         this.system[newPlanetId].buildings.push(this.emptyBuilding);
       }
     },
+    // Delete planet and change planetId of other planets
     deletePlanet(delPlanetId) {
       for (var i = this.system.length - 1; i >= 0; --i) {
         if (this.system[i].planetId == delPlanetId) {
@@ -300,12 +302,20 @@ export default {
         }
       }
     },
+    // Set the building on the currently selected tile
     setBuilding(building) {
       this.system[this.selectedTile[0]].buildings[this.selectedTile[1]] =
         building;
     },
+    // Select a tile and display corresponding building list
     selectTile(planetId, tileId, newPlanetType) {
-      if (tileId !== 0) {
+      // If tile is not the first tile of an habitable or sterile planet
+      if (
+        tileId === 0 &&
+        (newPlanetType === "habitable" || newPlanetType === "sterile")
+      ) {
+        return;
+      } else {
         if (newPlanetType !== this.selectedTile[2]) {
           if (newPlanetType === "moon" || newPlanetType === "asteroid") {
             this.buildListToDisplay = this.stellarBuildingList;
