@@ -5,11 +5,18 @@
         <table style="display: inline-block">
           <thead>
             <tr>
-              <th colspan="10">{{ $t("system") }}:</th>
+              <th colspan="1">{{ system.workforce }}/X</th>
+              <th colspan="1">
+                <img
+                  :src="require('@/assets/population.svg')"
+                  style="background-color: white; border-radius: 100%"
+                />
+              </th>
+              <th colspan="8">{{ $t("system") }}:</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="planet in system" :key="planet.planetId">
+            <tr v-for="planet in system.planets" :key="planet.planetId">
               <div style="position: relative; width: 100%">
                 <img
                   :src="
@@ -115,44 +122,44 @@ export default {
   data() {
     return {
       selectedTile: [0, 1, "habitable"],
-      emptyBuilding: { name: "Empty", image: "empty" },
+      emptyBuilding: { name: "Empty", image: "empty", workforce: 0 },
       stellarBuildingList: [
         {
           idLine: 0,
           buildings: [
-            { name: 1, image: "mine_dome" },
-            { name: 2, image: "factory_open" },
-            { name: 3, image: "research_open" },
+            { name: 1, image: "mine_dome", workforce: 1 },
+            { name: 2, image: "factory_open", workforce: 1 },
+            { name: 3, image: "research_open", workforce: 1 },
           ],
         },
         {
           idLine: 1,
           buildings: [
-            { name: 1, image: "finance_open" },
-            { name: 2, image: "spatioport_open" },
+            { name: 1, image: "finance_open", workforce: 3 },
+            { name: 2, image: "spatioport_open", workforce: 2 },
           ],
         },
         {
           idLine: 2,
           buildings: [
-            { name: 1, image: "defense_local_open" },
-            { name: 2, image: "radar_orbital" },
+            { name: 1, image: "defense_local_open", workforce: 1 },
+            { name: 2, image: "radar_orbital", workforce: 3 },
           ],
         },
         {
           idLine: 3,
           buildings: [
-            { name: 1, image: "happy_pot_open" },
-            { name: 2, image: "happy_open" },
+            { name: 1, image: "happy_pot_open", workforce: 2 },
+            { name: 2, image: "happy_open", workforce: 1 },
           ],
         },
         {
           idLine: 4,
           buildings: [
-            { name: 1, image: "shipyard_1_orbital" },
-            { name: 2, image: "shipyard_2_orbital" },
-            { name: 3, image: "shipyard_3_orbital" },
-            { name: 4, image: "shipyard_4_orbital" },
+            { name: 1, image: "shipyard_1_orbital", workforce: 2 },
+            { name: 2, image: "shipyard_2_orbital", workforce: 3 },
+            { name: 3, image: "shipyard_3_orbital", workforce: 4 },
+            { name: 4, image: "shipyard_4_orbital", workforce: 6 },
           ],
         },
       ],
@@ -160,42 +167,42 @@ export default {
         {
           idLine: 0,
           buildings: [
-            { name: 1, image: "hab_open" },
-            { name: 2, image: "hab_open_poor" },
-            { name: 3, image: "hab_open_rich" },
+            { name: 1, image: "hab_open", workforce: 0 },
+            { name: 2, image: "hab_open_poor", workforce: 0 },
+            { name: 3, image: "hab_open_rich", workforce: 0 },
           ],
         },
         {
           idLine: 1,
           buildings: [
-            { name: 1, image: "factory_open" },
-            { name: 2, image: "lift_open" },
-            { name: 3, image: "research_open" },
+            { name: 1, image: "factory_open", workforce: 2 },
+            { name: 2, image: "lift_open", workforce: 3 },
+            { name: 3, image: "research_open", workforce: 5 },
           ],
         },
         {
           idLine: 2,
           buildings: [
-            { name: 1, image: "university_open" },
-            { name: 2, image: "ideo_open" },
-            { name: 3, image: "ideo_credit_open" },
-            { name: 4, image: "market_open" },
+            { name: 1, image: "university_open", workforce: 2 },
+            { name: 2, image: "ideo_open", workforce: 2 },
+            { name: 3, image: "ideo_credit_open", workforce: 4 },
+            { name: 4, image: "market_open", workforce: 2 },
           ],
         },
         {
           idLine: 3,
           buildings: [
-            { name: 1, image: "monument_open" },
-            { name: 2, image: "finance_open" },
-            { name: 3, image: "happy_pot_open" },
+            { name: 1, image: "monument_open", workforce: 2 },
+            { name: 2, image: "finance_open", workforce: 5 },
+            { name: 3, image: "happy_pot_open", workforce: 5 },
           ],
         },
         {
           idLine: 4,
           buildings: [
-            { name: 1, image: "defense_local_open" },
-            { name: 2, image: "counterintelligence_open" },
-            { name: 3, image: "removecontact_open" },
+            { name: 1, image: "defense_local_open", workforce: 3 },
+            { name: 2, image: "counterintelligence_open", workforce: 5 },
+            { name: 3, image: "removecontact_open", workforce: 2 },
           ],
         },
       ],
@@ -203,100 +210,116 @@ export default {
         {
           idLine: 0,
           buildings: [
-            { name: 1, image: "mine_dome" },
-            { name: 2, image: "high_factory_dome" },
-            { name: 3, image: "lift_open" },
-            { name: 4, image: "research_open" },
+            { name: 1, image: "mine_dome", workforce: 2 },
+            { name: 2, image: "high_factory_dome", workforce: 5 },
+            { name: 3, image: "lift_open", workforce: 3 },
+            { name: 4, image: "research_open", workforce: 1 },
           ],
         },
         {
           idLine: 1,
           buildings: [
-            { name: 1, image: "hab_open" },
-            { name: 2, image: "ideo_open" },
-            { name: 3, image: "market_open" },
+            { name: 1, image: "hab_open", workforce: 0 },
+            { name: 2, image: "ideo_open", workforce: 2 },
+            { name: 3, image: "market_open", workforce: 2 },
           ],
         },
         {
           idLine: 2,
           buildings: [
-            { name: 1, image: "monument_open" },
-            { name: 2, image: "spatioport_open" },
-            { name: 3, image: "happy_pot_open" },
+            { name: 1, image: "monument_open", workforce: 3 },
+            { name: 2, image: "spatioport_open", workforce: 2 },
+            { name: 3, image: "happy_pot_open", workforce: 2 },
           ],
         },
         {
           idLine: 3,
           buildings: [
-            { name: 1, image: "defense_global_dome" },
-            { name: 2, image: "defense_local_open" },
-            { name: 3, image: "military_school_dome" },
-            { name: 4, image: "removecontact_open" },
+            { name: 1, image: "defense_global_dome", workforce: 5 },
+            { name: 2, image: "defense_local_open", workforce: 3 },
+            { name: 3, image: "military_school_dome", workforce: 3 },
+            { name: 4, image: "removecontact_open", workforce: 1 },
           ],
         },
       ],
       buildListToDisplay: [],
-      system: [
-        {
-          planetId: 0,
-          planetType: "habitable",
-          buildings: [],
-        },
-        {
-          planetId: 1,
-          planetType: "sterile",
-          buildings: [],
-        },
-        {
-          planetId: 2,
-          planetType: "moon",
-          buildings: [],
-        },
-      ],
+      system: {
+        workforce: 4,
+        planets: [
+          {
+            planetId: 0,
+            planetType: "habitable",
+            buildings: [],
+          },
+          {
+            planetId: 1,
+            planetType: "sterile",
+            buildings: [],
+          },
+          {
+            planetId: 2,
+            planetType: "moon",
+            buildings: [],
+          },
+        ],
+      },
     };
   },
   methods: {
     // Add building slots to the default system
     setUpSystem() {
-      this.system[0].buildings.push({ name: 0, image: "infra_dome" });
+      this.system.planets[0].buildings.push({
+        name: 0,
+        image: "infra_dome",
+        workforce: 2,
+      });
       for (let i = 1; i < 8; i++) {
-        this.system[0].buildings.push(this.emptyBuilding);
+        this.system.planets[0].buildings.push(this.emptyBuilding);
       }
-      this.system[1].buildings.push({ name: 0, image: "infra_dome" });
+      this.system.planets[1].buildings.push({
+        name: 0,
+        image: "infra_dome",
+        workforce: 2,
+      });
       for (let i = 1; i < 8; i++) {
-        this.system[1].buildings.push(this.emptyBuilding);
+        this.system.planets[1].buildings.push(this.emptyBuilding);
       }
       for (let i = 0; i < 3; i++) {
-        this.system[2].buildings.push(this.emptyBuilding);
+        this.system.planets[2].buildings.push(this.emptyBuilding);
       }
     },
     // Add planet to the planet list
     addPlanet(newPlanetType) {
       let tileNumber;
-      let newPlanetId = this.system[this.system.length - 1].planetId + 1;
+      let newPlanetId =
+        this.system.planets[this.system.planets.length - 1].planetId + 1;
       let emptyBuildings = [];
       if (newPlanetType === "moon" || newPlanetType === "asteroid")
         tileNumber = 3;
       else {
         tileNumber = 7;
-        emptyBuildings.push({ name: 0, image: "infra_dome" });
+        emptyBuildings.push({ name: 0, image: "infra_dome", workforce: 1 });
+        this.system.workforce += 1;
       }
-      this.system.push({
+      this.system.planets.push({
         planetId: newPlanetId,
         planetType: newPlanetType,
         buildings: emptyBuildings,
       });
       for (let i = 0; i < tileNumber; i++) {
-        this.system[newPlanetId].buildings.push(this.emptyBuilding);
+        this.system.planets[newPlanetId].buildings.push(this.emptyBuilding);
       }
     },
     // Delete planet and change planetId of other planets
     deletePlanet(delPlanetId) {
-      for (var i = this.system.length - 1; i >= 0; --i) {
-        if (this.system[i].planetId == delPlanetId) {
-          this.system.splice(i, 1);
-          for (var j = i; j < this.system.length; j++) {
-            this.system[j].planetId--;
+      for (var i = this.system.planets.length - 1; i >= 0; --i) {
+        if (this.system.planets[i].planetId == delPlanetId) {
+          this.system.planets[i].buildings.forEach((build) => {
+            this.system.workforce -= build.workforce;
+          });
+          this.system.planets.splice(i, 1);
+          for (var j = i; j < this.system.planets.length; j++) {
+            this.system.planets[j].planetId--;
           }
           break;
         }
@@ -304,8 +327,14 @@ export default {
     },
     // Set the building on the currently selected tile
     setBuilding(building) {
-      this.system[this.selectedTile[0]].buildings[this.selectedTile[1]] =
-        building;
+      this.system.workforce -=
+        this.system.planets[this.selectedTile[0]].buildings[
+          this.selectedTile[1]
+        ].workforce;
+      this.system.planets[this.selectedTile[0]].buildings[
+        this.selectedTile[1]
+      ] = building;
+      this.system.workforce += building.workforce;
     },
     // Select a tile and display corresponding building list
     selectTile(planetId, tileId, newPlanetType) {
