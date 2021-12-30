@@ -271,6 +271,12 @@ export default {
   },
   mounted() {
     this.updateAllProduction();
+    if (this.$cookie.isCookieAvailable("productions")) {
+      this.productions = this.$cookie.getCookie("productions").split(",");
+    }
+  },
+  beforeUnmount() {
+    this.$cookie.setCookie("productions", this.productions);
   },
 };
 </script>
