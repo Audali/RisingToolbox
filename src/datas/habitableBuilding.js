@@ -7,7 +7,7 @@ module.exports = [
                 image: "hab_open",
                 workforce: 0,
                 levels: [
-                    { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
+                    { bonus: [{ from: "direct", to: "sys_habitation", value: 3 }], level: 1 },
                 ],
             },
             {
@@ -15,7 +15,7 @@ module.exports = [
                 image: "hab_open_poor",
                 workforce: 0,
                 levels: [
-                    { bonus: [{ to: "sys_habitation", value: 4 }], level: 1 },
+                    { bonus: [{ from: "direct", to: "sys_habitation", value: 4 }], level: 1 },
                 ],
             },
             {
@@ -23,7 +23,7 @@ module.exports = [
                 image: "hab_open_rich",
                 workforce: 0,
                 levels: [
-                    { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
+                    { bonus: [{ from: "direct", to: "sys_habitation", value: 3 }], level: 1 },
                 ],
             },
         ],

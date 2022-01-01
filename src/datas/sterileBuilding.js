@@ -16,7 +16,7 @@ module.exports = [
                 image: "hab_open",
                 workforce: 0,
                 levels: [
-                    { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
+                    { bonus: [{ from: "direct", to: "sys_habitation", value: 3 }], level: 1 },
                 ],
             },
             { name: 2, image: "ideo_open", workforce: 2 },

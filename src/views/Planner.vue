@@ -64,7 +64,7 @@
                   style="background-color: white; border-radius: 100%"
                 />
               </th>
-              <th colspan="8">{{ $t("system") }}:</th>
+              <th colspan="9">{{ $t("system") }}:</th>
             </tr>
           </thead>
           <tbody>
@@ -134,6 +134,23 @@
                   />
                 </button>
               </td>
+              <td
+                v-if="
+                  planet.planetType === 'habitable' ||
+                  planet.planetType === 'sterile'
+                "
+              >
+                {{ planet.planetHabitation }}
+                <img
+                  :src="require('@/assets/population.svg')"
+                  style="
+                    background-color: white;
+                    border-radius: 100%;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                  "
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -198,16 +215,19 @@ export default {
             planetId: 0,
             planetType: "habitable",
             buildings: [],
+            planetHabitation: 0,
           },
           {
             planetId: 1,
             planetType: "sterile",
             buildings: [],
+            planetHabitation: 0,
           },
           {
             planetId: 2,
             planetType: "moon",
             buildings: [],
+            planetHabitation: 0,
           },
         ],
       },
@@ -220,16 +240,28 @@ export default {
         name: 0,
         image: "infra_dome",
         workforce: 2,
-        levels: [{ bonus: [{ to: "sys_habitation", value: 10 }], level: 1 }],
+        levels: [
+          {
+            bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
+            level: 1,
+          },
+        ],
       });
       for (let i = 1; i < 8; i++) {
         this.system.planets[0].buildings.push(this.emptyBuilding);
       }
+      this.system.planets[0].planetHabitation = 10;
+      this.system.planets[1].planetHabitation = 10;
       this.system.planets[1].buildings.push({
         name: 0,
         image: "infra_dome",
         workforce: 2,
-        levels: [{ bonus: [{ to: "sys_habitation", value: 10 }], level: 1 }],
+        levels: [
+          {
+            bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
+            level: 1,
+          },
+        ],
       });
       for (let i = 1; i < 8; i++) {
         this.system.planets[1].buildings.push(this.emptyBuilding);
@@ -251,7 +283,12 @@ export default {
           name: 0,
           image: "infra_dome",
           workforce: 2,
-          levels: [{ bonus: [{ to: "sys_habitation", value: 10 }], level: 1 }],
+          levels: [
+            {
+              bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
+              level: 1,
+            },
+          ],
         });
         // TODO: make a proper dome building
         this.system.workforce += 2;
@@ -264,6 +301,7 @@ export default {
         planetId: newPlanetId,
         planetType: newPlanetType,
         buildings: emptyBuildings,
+        planetHabitation: 10,
       });
       for (let i = 0; i < tileNumber; i++) {
         this.system.planets[newPlanetId].buildings.push(this.emptyBuilding);
@@ -283,7 +321,7 @@ export default {
           this.system.planets[i].buildings.forEach((build) => {
             this.system.workforce -= build.workforce;
             if (build.levels !== undefined) {
-              this.addBuildingValues(build.levels[0].bonus, true);
+              this.addBuildingValues(build.levels[0].bonus, i, true);
             }
           });
           this.system.planets.splice(i, 1);
@@ -303,7 +341,11 @@ export default {
           ];
         if (currBuilding.name !== "Empty") {
           if (currBuilding.levels !== undefined) {
-            await this.addBuildingValues(currBuilding.levels[0].bonus, true);
+            await this.addBuildingValues(
+              currBuilding.levels[0].bonus,
+              this.selectedTile[0],
+              true
+            );
           }
         }
         this.system.workforce -= currBuilding.workforce;
@@ -312,59 +354,70 @@ export default {
         ] = building;
         this.system.workforce += building.workforce;
         if (building.levels !== undefined) {
-          await this.addBuildingValues(building.levels[0].bonus, false);
+          await this.addBuildingValues(
+            building.levels[0].bonus,
+            this.selectedTile[0],
+            false
+          );
         }
       }
     },
-    addBuildingValues(buildingBonuses, substractValues) {
+    addBuildingValues(buildingBonuses, planetIndex, substractValues) {
       if (substractValues) {
         for (let i = 0; i < buildingBonuses.length; i++) {
           buildingBonuses[i].value *= -1;
         }
       }
+      let valueToAssign;
       buildingBonuses.forEach((bonus) => {
+        if (bonus.from === "direct") {
+          valueToAssign = bonus.value;
+        } else {
+          return;
+        }
         switch (bonus.to) {
           case "sys_habitation":
             this.system.defense -= this.system.defFromHabitation;
-            this.system.habitation += bonus.value;
+            this.system.habitation += valueToAssign;
+            this.system.planets[planetIndex].planetHabitation += valueToAssign;
             this.system.defFromHabitation =
               Math.round(this.system.habitation * 0.15 * 10) / 10;
             this.system.defense += this.system.defFromHabitation;
             this.system.credit +=
-              bonus.value * this.system.mobility * 0.1 + bonus.value;
+              valueToAssign * this.system.mobility * 0.1 + valueToAssign;
             this.system.credit = Math.round(this.system.credit * 10) / 10;
             break;
           case "sys_happiness":
-            this.system.happiness += bonus.value;
+            this.system.happiness += valueToAssign;
             break;
           case "sys_production":
-            this.system.production += bonus.value;
+            this.system.production += valueToAssign;
             break;
           case "sys_ideology":
-            this.system.ideology += bonus.value;
+            this.system.ideology += valueToAssign;
             break;
           case "sys_credit":
-            this.system.credit += bonus.value;
+            this.system.credit += valueToAssign;
             break;
           case "sys_technology":
-            this.system.technology += bonus.value;
+            this.system.technology += valueToAssign;
             break;
           case "sys_mobility":
-            this.system.credit += this.system.habitation * bonus.value * 0.1;
+            this.system.credit += this.system.habitation * valueToAssign * 0.1;
             this.system.credit = Math.round(this.system.credit * 10) / 10;
-            this.system.mobility += bonus.value;
+            this.system.mobility += valueToAssign;
             break;
           case "sys_defense":
-            this.system.defense += bonus.value;
+            this.system.defense += valueToAssign;
             break;
           case "sys_remove_contact":
-            this.system.remove_contact += bonus.value;
+            this.system.remove_contact += valueToAssign;
             break;
           case "sys_ci":
-            this.system.ci += bonus.value;
+            this.system.ci += valueToAssign;
             break;
           case "sys_radar":
-            this.system.radar += bonus.value;
+            this.system.radar += valueToAssign;
             break;
 
           default:

@@ -14,7 +14,7 @@ module.exports = [
             {
                 name: 2, image: "spatioport_open", workforce: 2,
                 levels: [
-                    { bonus: [{ to: "sys_mobility", value: 1 }], level: 1 },
+                    { bonus: [{ from: "direct", to: "sys_mobility", value: 1 }], level: 1 },
                 ],
             },
         ],
