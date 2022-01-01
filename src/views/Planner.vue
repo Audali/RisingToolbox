@@ -119,159 +119,15 @@
   </div>
 </template>
 <script>
+const habitableBuildingList = require("../datas/habitableBuilding.js");
+const sterileBuildingList = require("../datas/sterileBuilding.js");
+const stellarBuildingList = require("../datas/stellarBuilding.js");
 export default {
   name: "Planner",
   data() {
     return {
       selectedTile: [0, 1, "habitable"],
       emptyBuilding: { name: "Empty", image: "empty", workforce: 0 },
-      stellarBuildingList: [
-        {
-          idLine: 0,
-          buildings: [
-            { name: 1, image: "mine_dome", workforce: 1 },
-            { name: 2, image: "factory_open", workforce: 1 },
-            { name: 3, image: "research_open", workforce: 1 },
-          ],
-        },
-        {
-          idLine: 1,
-          buildings: [
-            { name: 1, image: "finance_open", workforce: 3 },
-            { name: 2, image: "spatioport_open", workforce: 2 },
-          ],
-        },
-        {
-          idLine: 2,
-          buildings: [
-            { name: 1, image: "defense_local_open", workforce: 1 },
-            { name: 2, image: "radar_orbital", workforce: 3 },
-          ],
-        },
-        {
-          idLine: 3,
-          buildings: [
-            { name: 1, image: "happy_pot_open", workforce: 2 },
-            { name: 2, image: "happy_open", workforce: 1 },
-          ],
-        },
-        {
-          idLine: 4,
-          buildings: [
-            { name: 1, image: "shipyard_1_orbital", workforce: 2 },
-            { name: 2, image: "shipyard_2_orbital", workforce: 3 },
-            { name: 3, image: "shipyard_3_orbital", workforce: 4 },
-            { name: 4, image: "shipyard_4_orbital", workforce: 6 },
-          ],
-        },
-      ],
-      habitableBuildingList: [
-        {
-          idLine: 0,
-          buildings: [
-            {
-              name: 1,
-              image: "hab_open",
-              workforce: 0,
-              levels: [
-                { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
-              ],
-            },
-            {
-              name: 2,
-              image: "hab_open_poor",
-              workforce: 0,
-              levels: [
-                { bonus: [{ to: "sys_habitation", value: 4 }], level: 1 },
-              ],
-            },
-            {
-              name: 3,
-              image: "hab_open_rich",
-              workforce: 0,
-              levels: [
-                { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
-              ],
-            },
-          ],
-        },
-        {
-          idLine: 1,
-          buildings: [
-            { name: 1, image: "factory_open", workforce: 2 },
-            { name: 2, image: "lift_open", workforce: 3 },
-            { name: 3, image: "research_open", workforce: 5 },
-          ],
-        },
-        {
-          idLine: 2,
-          buildings: [
-            { name: 1, image: "university_open", workforce: 2 },
-            { name: 2, image: "ideo_open", workforce: 2 },
-            { name: 3, image: "ideo_credit_open", workforce: 4 },
-            { name: 4, image: "market_open", workforce: 2 },
-          ],
-        },
-        {
-          idLine: 3,
-          buildings: [
-            { name: 1, image: "monument_open", workforce: 2 },
-            { name: 2, image: "finance_open", workforce: 5 },
-            { name: 3, image: "happy_pot_open", workforce: 5 },
-          ],
-        },
-        {
-          idLine: 4,
-          buildings: [
-            { name: 1, image: "defense_local_open", workforce: 3 },
-            { name: 2, image: "counterintelligence_open", workforce: 5 },
-            { name: 3, image: "removecontact_open", workforce: 2 },
-          ],
-        },
-      ],
-      sterileBuildingList: [
-        {
-          idLine: 0,
-          buildings: [
-            { name: 1, image: "mine_dome", workforce: 2 },
-            { name: 2, image: "high_factory_dome", workforce: 5 },
-            { name: 3, image: "lift_open", workforce: 3 },
-            { name: 4, image: "research_open", workforce: 1 },
-          ],
-        },
-        {
-          idLine: 1,
-          buildings: [
-            {
-              name: 1,
-              image: "hab_open",
-              workforce: 0,
-              levels: [
-                { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
-              ],
-            },
-            { name: 2, image: "ideo_open", workforce: 2 },
-            { name: 3, image: "market_open", workforce: 2 },
-          ],
-        },
-        {
-          idLine: 2,
-          buildings: [
-            { name: 1, image: "monument_open", workforce: 3 },
-            { name: 2, image: "spatioport_open", workforce: 2 },
-            { name: 3, image: "happy_pot_open", workforce: 2 },
-          ],
-        },
-        {
-          idLine: 3,
-          buildings: [
-            { name: 1, image: "defense_global_dome", workforce: 5 },
-            { name: 2, image: "defense_local_open", workforce: 3 },
-            { name: 3, image: "military_school_dome", workforce: 3 },
-            { name: 4, image: "removecontact_open", workforce: 1 },
-          ],
-        },
-      ],
       buildListToDisplay: [],
       system: {
         workforce: 4,
@@ -418,11 +274,11 @@ export default {
         // If tile is not the first tile of an habitable or sterile planet
         if (newPlanetType !== this.selectedTile[2]) {
           if (newPlanetType === "moon" || newPlanetType === "asteroid") {
-            this.buildListToDisplay = this.stellarBuildingList;
+            this.buildListToDisplay = stellarBuildingList;
           } else if (newPlanetType === "habitable") {
-            this.buildListToDisplay = this.habitableBuildingList;
+            this.buildListToDisplay = habitableBuildingList;
           } else if (newPlanetType === "sterile") {
-            this.buildListToDisplay = this.sterileBuildingList;
+            this.buildListToDisplay = sterileBuildingList;
           }
         }
         if (this.selectedTile[0] !== -1) {
@@ -464,7 +320,7 @@ export default {
     },
   },
   async mounted() {
-    this.buildListToDisplay = this.habitableBuildingList;
+    this.buildListToDisplay = habitableBuildingList;
     await this.setUpSystem();
     this.setSelectedTileButton("slot" + 0 + "_" + 1);
   },
