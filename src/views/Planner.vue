@@ -71,7 +71,7 @@
               >
                 <button
                   class="active_button"
-                  :ref="'production' + building"
+                  :ref="'slot' + planet.planetId + '_' + index"
                   @click="selectTile(planet.planetId, index, planet.planetType)"
                 >
                   <img
@@ -337,13 +337,13 @@ export default {
     },
     // Select a tile and display corresponding building list
     selectTile(planetId, tileId, newPlanetType) {
-      // If tile is not the first tile of an habitable or sterile planet
       if (
         tileId === 0 &&
         (newPlanetType === "habitable" || newPlanetType === "sterile")
       ) {
         return;
       } else {
+        // If tile is not the first tile of an habitable or sterile planet
         if (newPlanetType !== this.selectedTile[2]) {
           if (newPlanetType === "moon" || newPlanetType === "asteroid") {
             this.buildListToDisplay = this.stellarBuildingList;
@@ -353,7 +353,12 @@ export default {
             this.buildListToDisplay = this.sterileBuildingList;
           }
         }
+        this.$refs[
+          "slot" + this.selectedTile[0] + "_" + this.selectedTile[1]
+        ][0].classList.replace("selectedTile", "active_button");
+
         this.selectedTile = [planetId, tileId, newPlanetType];
+        this.setSelectedTileButton("slot" + planetId + "_" + tileId);
       }
     },
     // Replace active button class to inactive button class on given ref
@@ -370,10 +375,18 @@ export default {
         "active_button"
       );
     },
+    // Replace selected tile
+    setSelectedTileButton(refToSwap) {
+      this.$refs[refToSwap][0].classList.replace(
+        "active_button",
+        "selectedTile"
+      );
+    },
   },
-  mounted() {
+  async mounted() {
     this.buildListToDisplay = this.habitableBuildingList;
-    this.setUpSystem();
+    await this.setUpSystem();
+    this.setSelectedTileButton("slot" + 0 + "_" + 1);
   },
 };
 </script>
@@ -392,6 +405,10 @@ export default {
 }
 .inactive_button:hover {
   background-color: #52788b;
+}
+.selectedTile {
+  background-color: #8e60bf;
+  border: solid 2px #8e60bf;
 }
 table,
 th,
