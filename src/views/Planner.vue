@@ -350,11 +350,17 @@ export default {
     },
     // Delete planet and change planetId of other planets
     deletePlanet(delPlanetId) {
+      // Unselect the current tile if it's in the deleted planet
+      if (this.selectedTile[0] === delPlanetId) {
+        this.replaceSelectedTileButton(
+          "slot" + this.selectedTile[0] + "_" + this.selectedTile[1]
+        );
+        this.selectedTile[0] = -1;
+      }
       for (var i = this.system.planets.length - 1; i >= 0; --i) {
         if (this.system.planets[i].planetId == delPlanetId) {
           this.system.planets[i].buildings.forEach((build) => {
             this.system.workforce -= build.workforce;
-            // this.system.habitation -= ;
             if (build.levels !== undefined) {
               build.levels[0].bonus.forEach((bon) => {
                 if (bon.to === "sys_habitation") {
@@ -373,30 +379,32 @@ export default {
     },
     // Set the building on the currently selected tile
     setBuilding(building) {
-      let currBuilding =
+      if (this.selectedTile[0] !== -1) {
+        let currBuilding =
+          this.system.planets[this.selectedTile[0]].buildings[
+            this.selectedTile[1]
+          ];
+        if (currBuilding.name !== "Empty") {
+          if (currBuilding.levels !== undefined) {
+            currBuilding.levels[0].bonus.forEach((bon) => {
+              if (bon.to === "sys_habitation") {
+                this.system.habitation -= bon.value;
+              }
+            });
+          }
+        }
+        this.system.workforce -= currBuilding.workforce;
         this.system.planets[this.selectedTile[0]].buildings[
           this.selectedTile[1]
-        ];
-      if (currBuilding.name !== "Empty") {
-        if (currBuilding.levels !== undefined) {
-          currBuilding.levels[0].bonus.forEach((bon) => {
+        ] = building;
+        this.system.workforce += building.workforce;
+        if (building.levels !== undefined) {
+          building.levels[0].bonus.forEach((bon) => {
             if (bon.to === "sys_habitation") {
-              this.system.habitation -= bon.value;
+              this.system.habitation += bon.value;
             }
           });
         }
-      }
-      this.system.workforce -= currBuilding.workforce;
-      this.system.planets[this.selectedTile[0]].buildings[
-        this.selectedTile[1]
-      ] = building;
-      this.system.workforce += building.workforce;
-      if (building.levels !== undefined) {
-        building.levels[0].bonus.forEach((bon) => {
-          if (bon.to === "sys_habitation") {
-            this.system.habitation += bon.value;
-          }
-        });
       }
     },
     // Select a tile and display corresponding building list
@@ -417,10 +425,11 @@ export default {
             this.buildListToDisplay = this.sterileBuildingList;
           }
         }
-        this.$refs[
-          "slot" + this.selectedTile[0] + "_" + this.selectedTile[1]
-        ][0].classList.replace("selectedTile", "active_button");
-
+        if (this.selectedTile[0] !== -1) {
+          this.replaceSelectedTileButton(
+            "slot" + this.selectedTile[0] + "_" + this.selectedTile[1]
+          );
+        }
         this.selectedTile = [planetId, tileId, newPlanetType];
         this.setSelectedTileButton("slot" + planetId + "_" + tileId);
       }
@@ -439,11 +448,18 @@ export default {
         "active_button"
       );
     },
-    // Replace selected tile
+    // Set selected tile
     setSelectedTileButton(refToSwap) {
       this.$refs[refToSwap][0].classList.replace(
         "active_button",
         "selectedTile"
+      );
+    },
+    // Replace selected tile
+    replaceSelectedTileButton(refToSwap) {
+      this.$refs[refToSwap][0].classList.replace(
+        "selectedTile",
+        "active_button"
       );
     },
   },
