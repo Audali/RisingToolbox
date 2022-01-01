@@ -1,5 +1,55 @@
 <template>
   <div class="card">
+    <table class="tableProd">
+      <tr>
+        <td class="tdProd">
+          <img
+            src="@/assets/defense_light.svg"
+            class="iconProd"
+            alt="Defense"
+          />
+        </td>
+        <td class="tdProd" style="padding-right: 2rem">
+          <span class="inputProd">{{ system.defense }}</span>
+        </td>
+        <td class="tdProd">
+          <img src="@/assets/credit_light.svg" class="iconProd" alt="Credit" />
+        </td>
+        <td class="tdProd">
+          <span class="inputProd">{{ system.credit }}</span>
+        </td>
+        <td class="tdProd">
+          <img
+            src="@/assets/technology_light.svg"
+            class="iconProd"
+            alt="Technology"
+          />
+        </td>
+        <td class="tdProd">
+          <span class="inputProd">{{ system.technology }}</span>
+        </td>
+        <td class="tdProd">
+          <img
+            src="@/assets/ideology_light.svg"
+            class="iconProd"
+            alt="Ideology"
+          />
+        </td>
+        <td class="tdProd">
+          <span class="inputProd">{{ system.ideology }}</span>
+        </td>
+        <td class="tdProd">
+          <img
+            src="@/assets/production_light.svg"
+            class="iconProd"
+            alt="Production"
+          />
+        </td>
+        <td class="tdProd">
+          <span class="inputProd">{{ system.production }}</span>
+        </td>
+      </tr>
+    </table>
     <section class="container">
       <div class="leftDiv">
         <table style="display: inline-block; float: left">
@@ -132,6 +182,17 @@ export default {
       system: {
         workforce: 4,
         habitation: 20,
+        happiness: 35,
+        production: 40,
+        ideology: 0,
+        credit: 20,
+        technology: 0,
+        mobility: 0,
+        defense: 3,
+        ci: 0,
+        remove_contact: 0,
+        radar: 1,
+        defFromHabitation: 3,
         planets: [
           {
             planetId: 0,
@@ -192,8 +253,12 @@ export default {
           workforce: 2,
           levels: [{ bonus: [{ to: "sys_habitation", value: 10 }], level: 1 }],
         });
+        // TODO: make a proper dome building
         this.system.workforce += 2;
         this.system.habitation += 10;
+        this.system.credit += 10;
+        this.system.defense += 1.5;
+        this.system.defFromHabitation += 1.5;
       }
       this.system.planets.push({
         planetId: newPlanetId,
@@ -218,11 +283,7 @@ export default {
           this.system.planets[i].buildings.forEach((build) => {
             this.system.workforce -= build.workforce;
             if (build.levels !== undefined) {
-              build.levels[0].bonus.forEach((bon) => {
-                if (bon.to === "sys_habitation") {
-                  this.system.habitation -= bon.value;
-                }
-              });
+              this.addBuildingValues(build.levels[0].bonus, true);
             }
           });
           this.system.planets.splice(i, 1);
@@ -234,7 +295,7 @@ export default {
       }
     },
     // Set the building on the currently selected tile
-    setBuilding(building) {
+    async setBuilding(building) {
       if (this.selectedTile[0] !== -1) {
         let currBuilding =
           this.system.planets[this.selectedTile[0]].buildings[
@@ -242,11 +303,7 @@ export default {
           ];
         if (currBuilding.name !== "Empty") {
           if (currBuilding.levels !== undefined) {
-            currBuilding.levels[0].bonus.forEach((bon) => {
-              if (bon.to === "sys_habitation") {
-                this.system.habitation -= bon.value;
-              }
-            });
+            await this.addBuildingValues(currBuilding.levels[0].bonus, true);
           }
         }
         this.system.workforce -= currBuilding.workforce;
@@ -255,22 +312,78 @@ export default {
         ] = building;
         this.system.workforce += building.workforce;
         if (building.levels !== undefined) {
-          building.levels[0].bonus.forEach((bon) => {
-            if (bon.to === "sys_habitation") {
-              this.system.habitation += bon.value;
-            }
-          });
+          await this.addBuildingValues(building.levels[0].bonus, false);
+        }
+      }
+    },
+    addBuildingValues(buildingBonuses, substractValues) {
+      if (substractValues) {
+        for (let i = 0; i < buildingBonuses.length; i++) {
+          buildingBonuses[i].value *= -1;
+        }
+      }
+      buildingBonuses.forEach((bonus) => {
+        switch (bonus.to) {
+          case "sys_habitation":
+            this.system.defense -= this.system.defFromHabitation;
+            this.system.habitation += bonus.value;
+            this.system.defFromHabitation =
+              Math.round(this.system.habitation * 0.15 * 10) / 10;
+            this.system.defense += this.system.defFromHabitation;
+            this.system.credit +=
+              bonus.value * this.system.mobility * 0.1 + bonus.value;
+            this.system.credit = Math.round(this.system.credit * 10) / 10;
+            break;
+          case "sys_happiness":
+            this.system.happiness += bonus.value;
+            break;
+          case "sys_production":
+            this.system.production += bonus.value;
+            break;
+          case "sys_ideology":
+            this.system.ideology += bonus.value;
+            break;
+          case "sys_credit":
+            this.system.credit += bonus.value;
+            break;
+          case "sys_technology":
+            this.system.technology += bonus.value;
+            break;
+          case "sys_mobility":
+            this.system.credit += this.system.habitation * bonus.value * 0.1;
+            this.system.credit = Math.round(this.system.credit * 10) / 10;
+            this.system.mobility += bonus.value;
+            break;
+          case "sys_defense":
+            this.system.defense += bonus.value;
+            break;
+          case "sys_remove_contact":
+            this.system.remove_contact += bonus.value;
+            break;
+          case "sys_ci":
+            this.system.ci += bonus.value;
+            break;
+          case "sys_radar":
+            this.system.radar += bonus.value;
+            break;
+
+          default:
+            console.log("default");
+        }
+      });
+
+      if (substractValues) {
+        for (let i = 0; i < buildingBonuses.length; i++) {
+          buildingBonuses[i].value *= -1;
         }
       }
     },
     // Select a tile and display corresponding building list
     selectTile(planetId, tileId, newPlanetType) {
       if (
-        tileId === 0 &&
-        (newPlanetType === "habitable" || newPlanetType === "sterile")
+        tileId !== 0 ||
+        (newPlanetType !== "habitable" && newPlanetType !== "sterile")
       ) {
-        return;
-      } else {
         // If tile is not the first tile of an habitable or sterile planet
         if (newPlanetType !== this.selectedTile[2]) {
           if (newPlanetType === "moon" || newPlanetType === "asteroid") {
@@ -327,9 +440,6 @@ export default {
 };
 </script>
 <style scoped>
-.inputProd {
-  width: 3.5rem;
-}
 .active_button {
   background-color: #04a5db;
 }
@@ -368,5 +478,23 @@ td {
 img {
   width: 2.3rem;
   height: 2.3rem;
+}
+.iconProd {
+  width: 2rem;
+  vertical-align: bottom;
+}
+.inputProd {
+  width: 5rem;
+  height: 1.5rem;
+  font-size: medium;
+}
+.tableProd {
+  display: inline-block;
+  background-color: rgb(21 23 27);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+.tdProd {
+  border-style: none;
 }
 </style>

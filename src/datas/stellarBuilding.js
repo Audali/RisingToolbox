@@ -11,7 +11,12 @@ module.exports = [
         idLine: 1,
         buildings: [
             { name: 1, image: "finance_open", workforce: 3 },
-            { name: 2, image: "spatioport_open", workforce: 2 },
+            {
+                name: 2, image: "spatioport_open", workforce: 2,
+                levels: [
+                    { bonus: [{ to: "sys_mobility", value: 1 }], level: 1 },
+                ],
+            },
         ],
     },
     {
