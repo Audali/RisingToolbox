@@ -5,7 +5,9 @@
         <table style="display: inline-block; float: left">
           <thead>
             <tr>
-              <th colspan="1">{{ system.workforce }}/X</th>
+              <th colspan="1">
+                {{ system.workforce }}/{{ system.habitation }}
+              </th>
               <th colspan="1">
                 <img
                   :src="require('@/assets/population.svg')"
@@ -167,9 +169,30 @@ export default {
         {
           idLine: 0,
           buildings: [
-            { name: 1, image: "hab_open", workforce: 0 },
-            { name: 2, image: "hab_open_poor", workforce: 0 },
-            { name: 3, image: "hab_open_rich", workforce: 0 },
+            {
+              name: 1,
+              image: "hab_open",
+              workforce: 0,
+              levels: [
+                { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
+              ],
+            },
+            {
+              name: 2,
+              image: "hab_open_poor",
+              workforce: 0,
+              levels: [
+                { bonus: [{ to: "sys_habitation", value: 4 }], level: 1 },
+              ],
+            },
+            {
+              name: 3,
+              image: "hab_open_rich",
+              workforce: 0,
+              levels: [
+                { bonus: [{ to: "sys_habitation", value: 3 }], level: 1 },
+              ],
+            },
           ],
         },
         {
@@ -219,7 +242,14 @@ export default {
         {
           idLine: 1,
           buildings: [
-            { name: 1, image: "hab_open", workforce: 0 },
+            {
+              name: 1,
+              image: "hab_open",
+              workforce: 0,
+              levels: [
+                { bonus: [{ to: "sys_habitation", value: 10 }], level: 1 },
+              ],
+            },
             { name: 2, image: "ideo_open", workforce: 2 },
             { name: 3, image: "market_open", workforce: 2 },
           ],
@@ -245,6 +275,7 @@ export default {
       buildListToDisplay: [],
       system: {
         workforce: 4,
+        habitation: 20,
         planets: [
           {
             planetId: 0,
@@ -272,6 +303,7 @@ export default {
         name: 0,
         image: "infra_dome",
         workforce: 2,
+        levels: [{ bonus: [{ to: "sys_habitation", value: 10 }], level: 1 }],
       });
       for (let i = 1; i < 8; i++) {
         this.system.planets[0].buildings.push(this.emptyBuilding);
@@ -280,6 +312,7 @@ export default {
         name: 0,
         image: "infra_dome",
         workforce: 2,
+        levels: [{ bonus: [{ to: "sys_habitation", value: 10 }], level: 1 }],
       });
       for (let i = 1; i < 8; i++) {
         this.system.planets[1].buildings.push(this.emptyBuilding);
@@ -297,8 +330,14 @@ export default {
         tileNumber = 3;
       else {
         tileNumber = 7;
-        emptyBuildings.push({ name: 0, image: "infra_dome", workforce: 2 });
+        emptyBuildings.push({
+          name: 0,
+          image: "infra_dome",
+          workforce: 2,
+          levels: [{ bonus: [{ to: "sys_habitation", value: 10 }], level: 1 }],
+        });
         this.system.workforce += 2;
+        this.system.habitation += 10;
       }
       this.system.planets.push({
         planetId: newPlanetId,
@@ -315,6 +354,14 @@ export default {
         if (this.system.planets[i].planetId == delPlanetId) {
           this.system.planets[i].buildings.forEach((build) => {
             this.system.workforce -= build.workforce;
+            // this.system.habitation -= ;
+            if (build.levels !== undefined) {
+              build.levels[0].bonus.forEach((bon) => {
+                if (bon.to === "sys_habitation") {
+                  this.system.habitation -= bon.value;
+                }
+              });
+            }
           });
           this.system.planets.splice(i, 1);
           for (var j = i; j < this.system.planets.length; j++) {
@@ -326,14 +373,31 @@ export default {
     },
     // Set the building on the currently selected tile
     setBuilding(building) {
-      this.system.workforce -=
+      let currBuilding =
         this.system.planets[this.selectedTile[0]].buildings[
           this.selectedTile[1]
-        ].workforce;
+        ];
+      if (currBuilding.name !== "Empty") {
+        if (currBuilding.levels !== undefined) {
+          currBuilding.levels[0].bonus.forEach((bon) => {
+            if (bon.to === "sys_habitation") {
+              this.system.habitation -= bon.value;
+            }
+          });
+        }
+      }
+      this.system.workforce -= currBuilding.workforce;
       this.system.planets[this.selectedTile[0]].buildings[
         this.selectedTile[1]
       ] = building;
       this.system.workforce += building.workforce;
+      if (building.levels !== undefined) {
+        building.levels[0].bonus.forEach((bon) => {
+          if (bon.to === "sys_habitation") {
+            this.system.habitation += bon.value;
+          }
+        });
+      }
     },
     // Select a tile and display corresponding building list
     selectTile(planetId, tileId, newPlanetType) {
