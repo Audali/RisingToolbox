@@ -10,7 +10,7 @@
           />
         </td>
         <td class="tdProd" style="padding-right: 2rem">
-          <span class="inputProd">{{ system.defense }}</span>
+          <span class="displayProd">{{ system.defense }}</span>
         </td>
         <td class="tdProd">
           <img
@@ -20,7 +20,7 @@
           />
         </td>
         <td class="tdProd">
-          <span class="inputProd">{{ system.credit }}</span>
+          <span class="displayProd">{{ system.credit }}</span>
         </td>
         <td class="tdProd">
           <img
@@ -30,7 +30,7 @@
           />
         </td>
         <td class="tdProd">
-          <span class="inputProd">{{ system.technology }}</span>
+          <span class="displayProd">{{ system.technology }}</span>
         </td>
         <td class="tdProd">
           <img
@@ -40,7 +40,7 @@
           />
         </td>
         <td class="tdProd">
-          <span class="inputProd">{{ system.ideology }}</span>
+          <span class="displayProd">{{ system.ideology }}</span>
         </td>
         <td class="tdProd">
           <img
@@ -50,7 +50,59 @@
           />
         </td>
         <td class="tdProd">
-          <span class="inputProd">{{ system.production }}</span>
+          <span class="displayProd">{{ system.production }}</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="tdProd">
+          <img
+            src="@/assets/resource/happiness_light.svg"
+            class="iconProd"
+            alt="Happiness"
+          />
+        </td>
+        <td class="tdProd" style="padding-right: 2rem">
+          <span class="displayProd">{{ system.happiness }}</span>
+        </td>
+        <td class="tdProd">
+          <img
+            src="@/assets/resource/mobility_light.svg"
+            class="iconProd"
+            alt="Mobility"
+          />
+        </td>
+        <td class="tdProd">
+          <span class="displayProd">{{ system.mobility }}</span>
+        </td>
+        <td class="tdProd">
+          <img
+            src="@/assets/resource/counter_intelligence_light.svg"
+            class="iconProd"
+            alt="CI"
+          />
+        </td>
+        <td class="tdProd">
+          <span class="displayProd">{{ system.ci }}</span>
+        </td>
+        <td class="tdProd">
+          <img
+            src="@/assets/resource/remove_contact_light.svg"
+            class="iconProd"
+            alt="Remove_contact"
+          />
+        </td>
+        <td class="tdProd">
+          <span class="displayProd">{{ system.remove_contact }}</span>
+        </td>
+        <td class="tdProd">
+          <img
+            src="@/assets/resource/radar_light.svg"
+            class="iconProd"
+            alt="Radar"
+          />
+        </td>
+        <td class="tdProd">
+          <span class="displayProd">{{ system.radar }}</span>
         </td>
       </tr>
     </table>
@@ -618,7 +670,7 @@ img {
   width: 2rem;
   vertical-align: bottom;
 }
-.inputProd {
+.displayProd {
   width: 5rem;
   height: 1.5rem;
   font-size: medium;
@@ -630,7 +682,9 @@ img {
   border-radius: 1rem;
 }
 .tdProd {
+  width: 3rem;
   border-style: none;
+  text-align: left;
 }
 .bodyFactors {
   background-color: #8e60bf;
