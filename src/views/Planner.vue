@@ -104,27 +104,77 @@
                 </button>
               </td>
             </tr>
-            <tr v-for="planet in system.planets" :key="planet.planetId">
-              <div style="position: relative; width: 100%">
-                <img
-                  :src="
-                    require('@/assets/system/' + planet.planetType + '.svg')
-                  "
-                  :alt="planet.planetType"
-                />
-                <button
-                  style="position: absolute; top: 60%; left: 60%"
-                  @click="deletePlanet(planet.planetId)"
-                >
-                  x
-                </button>
-              </div>
-              <td v-if="planet.buildings.length === 0">Empty</td>
-              <td
-                v-else
-                v-for="(building, index) in planet.buildings"
-                :key="index"
-              >
+            <tr v-if="system.planets.length === 0">
+              Empty
+            </tr>
+            <tr v-else v-for="planet in system.planets" :key="planet.planetId">
+              <td>
+                <div style="position: relative; width: 100%">
+                  <img
+                    :src="
+                      require('@/assets/system/' + planet.planetType + '.svg')
+                    "
+                    :alt="planet.planetType"
+                  />
+                  <button
+                    style="position: absolute; top: 60%; left: 60%"
+                    @click="deletePlanet(planet.planetId)"
+                  >
+                    x
+                  </button>
+                </div>
+              </td>
+              <td style="display: flex">
+                <span class="bodyFactors">
+                  <input
+                    type="number"
+                    :ref="'bodyInd' + planet.planetId"
+                    v-model="planet.ind"
+                    class="bodyInput"
+                    min="1"
+                    max="5"
+                    step="1"
+                  />
+                  <img
+                    src="@/assets/system/stellar_body_industrial_factor.svg"
+                    class="bodyImg"
+                    alt="bodyInd"
+                  />
+                </span>
+                <span class="bodyFactors">
+                  <input
+                    type="number"
+                    :ref="'bodyTec' + planet.planetId"
+                    v-model="planet.tec"
+                    class="bodyInput"
+                    min="1"
+                    max="5"
+                    step="1"
+                  />
+                  <img
+                    src="@/assets/system/stellar_body_technological_factor.svg"
+                    class="bodyImg"
+                    alt="bodyTec"
+                  />
+                </span>
+                <span class="bodyFactors">
+                  <input
+                    type="number"
+                    :ref="'bodyAct' + planet.planetId"
+                    v-model="planet.act"
+                    class="bodyInput"
+                    min="1"
+                    max="5"
+                    step="1"
+                  />
+                  <img
+                    src="@/assets/system/stellar_body_activity_factor.svg"
+                    class="bodyImg"
+                    alt="bodyAct"
+                  />
+                </span>
+              </td>
+              <td v-for="(building, index) in planet.buildings" :key="index">
                 <button
                   class="active_button"
                   :ref="'slot' + planet.planetId + '_' + index"
@@ -146,12 +196,12 @@
               >
                 {{ planet.planetHabitation }}
                 <img
-                  :src="require('@/assets/resource/population.svg')"
+                  :src="require('@/assets/system/stellar_body_population.svg')"
                   style="
-                    background-color: white;
-                    border-radius: 100%;
+                    background-color: #8e60bf;
                     width: 1.5rem;
-                    height: 1.5rem;
+                    height: 1rem;
+                    border-radius: 15%;
                   "
                 />
               </td>
@@ -160,7 +210,7 @@
         </table>
       </div>
       <div class="rightDiv">
-        <table class="tableLeveling">
+        <table>
           <thead>
             <tr>
               <th colspan="4">{{ $t("buildings") }}:</th>
@@ -220,27 +270,27 @@ export default {
             planetType: "habitable",
             buildings: [],
             planetHabitation: 0,
-            ind: 3,
-            tec: 3,
-            act: 3,
+            ind: 5,
+            tec: 5,
+            act: 5,
           },
           {
             planetId: 1,
             planetType: "sterile",
             buildings: [],
             planetHabitation: 0,
-            ind: 3,
-            tec: 3,
-            act: 3,
+            ind: 5,
+            tec: 5,
+            act: 5,
           },
           {
             planetId: 2,
             planetType: "moon",
             buildings: [],
             planetHabitation: 0,
-            ind: 3,
-            tec: 3,
-            act: 3,
+            ind: 5,
+            tec: 5,
+            act: 5,
           },
         ],
       },
@@ -315,9 +365,9 @@ export default {
         planetType: newPlanetType,
         buildings: emptyBuildings,
         planetHabitation: 10,
-        ind: 3,
-        tec: 3,
-        act: 3,
+        ind: 5,
+        tec: 5,
+        act: 5,
       });
       for (let i = 0; i < tileNumber; i++) {
         this.system.planets[newPlanetId].buildings.push(this.emptyBuilding);
@@ -581,5 +631,27 @@ img {
 }
 .tdProd {
   border-style: none;
+}
+.bodyFactors {
+  background-color: #8e60bf;
+  border: solid 2px #8e60bf;
+  margin: 0.2rem;
+  border-radius: 15%;
+  width: 3rem;
+  height: 1.5rem;
+  display: flex;
+}
+.bodyInput {
+  background-color: #8e60bf;
+  border-style: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  font-size: medium;
+  padding-right: 0px;
+}
+.bodyImg {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 </style>
