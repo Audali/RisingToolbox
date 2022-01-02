@@ -292,9 +292,12 @@
   </div>
 </template>
 <script>
-const habitableBuildingList = require("../datas/habitableBuilding.js");
-const sterileBuildingList = require("../datas/sterileBuilding.js");
-const stellarBuildingList = require("../datas/stellarBuilding.js");
+const habitableBuildingList = require("../datas/flashHabitableBuilding.js");
+const sterileBuildingList = require("../datas/flashSterileBuilding.js");
+const stellarBuildingList = require("../datas/flashStellarBuilding.js");
+// const habitableBuildingList = require("../datas/habitableBuilding.js");
+// const sterileBuildingList = require("../datas/sterileBuilding.js");
+// const stellarBuildingList = require("../datas/stellarBuilding.js");
 export default {
   name: "Planner",
   data() {
@@ -491,13 +494,20 @@ export default {
             valueToAssign = bonus.value * this.system.habitation;
             break;
           case "sys_defense":
-            valueToAssign = bonus.value * this.system.defense;
+            if (!substractValues) {
+              valueToAssign = bonus.value * this.system.defense;
+            } else {
+              valueToAssign =
+                (-1 * this.system.defense) / (1 + -1 * bonus.value);
+            }
+
             break;
         }
         switch (bonus.to) {
           case "sys_habitation":
             this.system.defense -= this.system.defFromHabitation;
             this.system.habitation += valueToAssign;
+            this.system.happiness -= valueToAssign;
             this.system.planets[planetIndex].planetHabitation += valueToAssign;
             this.system.defFromHabitation =
               Math.round(this.system.habitation * 0.15 * 10) / 10;
