@@ -4,7 +4,7 @@
       <tr>
         <td class="tdProd">
           <img
-            src="@/assets/defense_light.svg"
+            src="@/assets/system/defense_light.svg"
             class="iconProd"
             alt="Defense"
           />
@@ -13,14 +13,18 @@
           <span class="inputProd">{{ system.defense }}</span>
         </td>
         <td class="tdProd">
-          <img src="@/assets/credit_light.svg" class="iconProd" alt="Credit" />
+          <img
+            src="@/assets/resource/credit_light.svg"
+            class="iconProd"
+            alt="Credit"
+          />
         </td>
         <td class="tdProd">
           <span class="inputProd">{{ system.credit }}</span>
         </td>
         <td class="tdProd">
           <img
-            src="@/assets/technology_light.svg"
+            src="@/assets/resource/technology_light.svg"
             class="iconProd"
             alt="Technology"
           />
@@ -30,7 +34,7 @@
         </td>
         <td class="tdProd">
           <img
-            src="@/assets/ideology_light.svg"
+            src="@/assets/resource/ideology_light.svg"
             class="iconProd"
             alt="Ideology"
           />
@@ -40,7 +44,7 @@
         </td>
         <td class="tdProd">
           <img
-            src="@/assets/production_light.svg"
+            src="@/assets/resource/production_light.svg"
             class="iconProd"
             alt="Production"
           />
@@ -60,7 +64,7 @@
               </th>
               <th colspan="1">
                 <img
-                  :src="require('@/assets/population.svg')"
+                  :src="require('@/assets/resource/population.svg')"
                   style="background-color: white; border-radius: 100%"
                 />
               </th>
@@ -69,7 +73,7 @@
           </thead>
           <tbody>
             <tr>
-              <td />
+              <td colspan="2" />
               <td>
                 <button class="active_button" @click="addPlanet('habitable')">
                   <img
@@ -142,7 +146,7 @@
               >
                 {{ planet.planetHabitation }}
                 <img
-                  :src="require('@/assets/population.svg')"
+                  :src="require('@/assets/resource/population.svg')"
                   style="
                     background-color: white;
                     border-radius: 100%;

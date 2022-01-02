@@ -2,7 +2,11 @@
   <div class="card">
     <table class="tableProd">
       <td>
-        <img src="@/assets/credit_light.svg" class="iconProd" alt="Credit" />
+        <img
+          src="@/assets/resource/credit_light.svg"
+          class="iconProd"
+          alt="Credit"
+        />
       </td>
       <td>
         <input
@@ -15,7 +19,7 @@
       </td>
       <td>
         <img
-          src="@/assets/technology_light.svg"
+          src="@/assets/resource/technology_light.svg"
           class="iconProd"
           alt="Technology"
         />
@@ -31,7 +35,7 @@
       </td>
       <td>
         <img
-          src="@/assets/ideology_light.svg"
+          src="@/assets/resource/ideology_light.svg"
           class="iconProd"
           alt="Ideology"
         />
@@ -47,7 +51,7 @@
       </td>
       <td>
         <img
-          src="@/assets/production_light.svg"
+          src="@/assets/resource/production_light.svg"
           class="iconProd"
           alt="Production"
         />
@@ -85,7 +89,11 @@
               :ref="'production' + index + '0'"
               @click="setProduction(index, 0)"
             >
-              <img src="@/assets/credit.svg" class="iconProd" alt="Credit" />
+              <img
+                src="@/assets/resource/credit.svg"
+                class="iconProd"
+                alt="Credit"
+              />
             </button>
             <button
               class="inactive_button"
@@ -93,7 +101,7 @@
               @click="setProduction(index, 1)"
             >
               <img
-                src="@/assets/technology.svg"
+                src="@/assets/resource/technology.svg"
                 class="iconProd"
                 alt="Technology"
               />
@@ -104,7 +112,7 @@
               @click="setProduction(index, 2)"
             >
               <img
-                src="@/assets/ideology.svg"
+                src="@/assets/resource/ideology.svg"
                 class="iconProd"
                 alt="Ideology"
               />
@@ -115,7 +123,7 @@
               @click="setProduction(index, 3)"
             >
               <img
-                src="@/assets/production.svg"
+                src="@/assets/resource/production.svg"
                 class="iconProd"
                 alt="Production"
               />
