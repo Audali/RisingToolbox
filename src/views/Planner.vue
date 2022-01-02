@@ -490,6 +490,9 @@ export default {
           case "sys_pop":
             valueToAssign = bonus.value * this.system.habitation;
             break;
+          case "sys_defense":
+            valueToAssign = bonus.value * this.system.defense;
+            break;
         }
         switch (bonus.to) {
           case "sys_habitation":
@@ -500,7 +503,7 @@ export default {
               Math.round(this.system.habitation * 0.15 * 10) / 10;
             this.system.defense += this.system.defFromHabitation;
             this.system.credit +=
-              valueToAssign * this.system.mobility * 0.1 + valueToAssign;
+              valueToAssign * this.system.mobility * 0.1 + valueToAssign * 2;
             this.system.credit = Math.round(this.system.credit * 10) / 10;
             break;
           case "sys_happiness":
