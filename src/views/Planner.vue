@@ -216,18 +216,27 @@ export default {
             planetType: "habitable",
             buildings: [],
             planetHabitation: 0,
+            ind: 3,
+            tec: 3,
+            act: 3,
           },
           {
             planetId: 1,
             planetType: "sterile",
             buildings: [],
             planetHabitation: 0,
+            ind: 3,
+            tec: 3,
+            act: 3,
           },
           {
             planetId: 2,
             planetType: "moon",
             buildings: [],
             planetHabitation: 0,
+            ind: 3,
+            tec: 3,
+            act: 3,
           },
         ],
       },
@@ -302,6 +311,9 @@ export default {
         planetType: newPlanetType,
         buildings: emptyBuildings,
         planetHabitation: 10,
+        ind: 3,
+        tec: 3,
+        act: 3,
       });
       for (let i = 0; i < tileNumber; i++) {
         this.system.planets[newPlanetId].buildings.push(this.emptyBuilding);
@@ -370,10 +382,26 @@ export default {
       }
       let valueToAssign;
       buildingBonuses.forEach((bonus) => {
-        if (bonus.from === "direct") {
-          valueToAssign = bonus.value;
-        } else {
-          return;
+        switch (bonus.from) {
+          case "direct":
+            valueToAssign = bonus.value;
+            break;
+          case "body_pop":
+            valueToAssign =
+              bonus.value * this.system.planets[planetIndex].planetHabitation;
+            break;
+          case "body_ind":
+            valueToAssign = bonus.value * this.system.planets[planetIndex].ind;
+            break;
+          case "body_tec":
+            valueToAssign = bonus.value * this.system.planets[planetIndex].tec;
+            break;
+          case "body_act":
+            valueToAssign = bonus.value * this.system.planets[planetIndex].act;
+            break;
+          case "sys_pop":
+            valueToAssign = bonus.value * this.system.habitation;
+            break;
         }
         switch (bonus.to) {
           case "sys_habitation":

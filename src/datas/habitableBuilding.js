@@ -31,7 +31,12 @@ module.exports = [
     {
         idLine: 1,
         buildings: [
-            { name: 1, image: "factory_open", workforce: 2 },
+            {
+                name: 1, image: "factory_open", workforce: 2,
+                levels: [
+                    { bonus: [{ from: "body_ind", to: "sys_production", value: 3 }, { from: "body_pop", to: "sys_production", value: -3 }], level: 1 },
+                ],
+            },
             { name: 2, image: "lift_open", workforce: 3 },
             { name: 3, image: "research_open", workforce: 5 },
         ],
