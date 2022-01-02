@@ -301,14 +301,25 @@ export default {
     return {
       selectedTile: [0, 1, "habitable"],
       emptyBuilding: { name: "Empty", image: "empty", workforce: 0 },
+      infra: {
+        name: 0,
+        image: "infra_dome",
+        workforce: 2,
+        levels: [
+          {
+            bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
+            level: 1,
+          },
+        ],
+      },
       buildListToDisplay: [],
       system: {
         workforce: 4,
-        habitation: 20,
+        habitation: 0,
         happiness: 35,
         production: 40,
         ideology: 0,
-        credit: 20,
+        credit: 0,
         technology: 0,
         mobility: 0,
         defense: 3,
@@ -350,34 +361,14 @@ export default {
   },
   methods: {
     // Add building slots to the default system
-    setUpSystem() {
-      this.system.planets[0].buildings.push({
-        name: 0,
-        image: "infra_dome",
-        workforce: 2,
-        levels: [
-          {
-            bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
-            level: 1,
-          },
-        ],
-      });
+    async setUpSystem() {
+      this.system.planets[0].buildings.push(this.infra);
+      await this.addBuildingValues(this.infra.levels[0].bonus, 0, false);
       for (let i = 1; i < 8; i++) {
         this.system.planets[0].buildings.push(this.emptyBuilding);
       }
-      this.system.planets[0].planetHabitation = 10;
-      this.system.planets[1].planetHabitation = 10;
-      this.system.planets[1].buildings.push({
-        name: 0,
-        image: "infra_dome",
-        workforce: 2,
-        levels: [
-          {
-            bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
-            level: 1,
-          },
-        ],
-      });
+      this.system.planets[1].buildings.push(this.infra);
+      await this.addBuildingValues(this.infra.levels[0].bonus, 1, false);
       for (let i = 1; i < 8; i++) {
         this.system.planets[1].buildings.push(this.emptyBuilding);
       }
@@ -386,7 +377,7 @@ export default {
       }
     },
     // Add planet to the planet list
-    addPlanet(newPlanetType) {
+    async addPlanet(newPlanetType) {
       let tileNumber;
       let newPlanetId = this.system.planets.length;
       let emptyBuildings = [];
@@ -394,23 +385,8 @@ export default {
         tileNumber = 3;
       else {
         tileNumber = 7;
-        emptyBuildings.push({
-          name: 0,
-          image: "infra_dome",
-          workforce: 2,
-          levels: [
-            {
-              bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
-              level: 1,
-            },
-          ],
-        });
-        // TODO: make a proper dome building
+        emptyBuildings.push(this.infra);
         this.system.workforce += 2;
-        this.system.habitation += 10;
-        this.system.credit += 10;
-        this.system.defense += 1.5;
-        this.system.defFromHabitation += 1.5;
       }
       this.system.planets.push({
         planetId: newPlanetId,
@@ -421,6 +397,12 @@ export default {
         tec: 5,
         act: 5,
       });
+      await this.addBuildingValues(
+        this.infra.levels[0].bonus,
+        newPlanetId,
+        false
+      );
+
       for (let i = 0; i < tileNumber; i++) {
         this.system.planets[newPlanetId].buildings.push(this.emptyBuilding);
       }
