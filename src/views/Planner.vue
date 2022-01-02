@@ -292,12 +292,12 @@
   </div>
 </template>
 <script>
-const habitableBuildingList = require("../datas/flashHabitableBuilding.js");
-const sterileBuildingList = require("../datas/flashSterileBuilding.js");
-const stellarBuildingList = require("../datas/flashStellarBuilding.js");
-// const habitableBuildingList = require("../datas/habitableBuilding.js");
-// const sterileBuildingList = require("../datas/sterileBuilding.js");
-// const stellarBuildingList = require("../datas/stellarBuilding.js");
+// const habitableBuildingList = require("../datas/flashHabitableBuilding.js");
+// const sterileBuildingList = require("../datas/flashSterileBuilding.js");
+// const stellarBuildingList = require("../datas/flashStellarBuilding.js");
+const habitableBuildingList = require("../datas/habitableBuilding.js");
+const sterileBuildingList = require("../datas/sterileBuilding.js");
+const stellarBuildingList = require("../datas/stellarBuilding.js");
 export default {
   name: "Planner",
   data() {
@@ -310,7 +310,24 @@ export default {
         workforce: 2,
         levels: [
           {
-            bonus: [{ from: "direct", to: "sys_habitation", value: 10 }],
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 2 },
+            ],
+            level: 1,
+          },
+        ],
+      },
+      flashInfra: {
+        name: 0,
+        image: "infra_dome",
+        workforce: 2,
+        levels: [
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 8 },
+              { from: "direct", to: "sys_happiness", value: 12 },
+            ],
             level: 1,
           },
         ],
