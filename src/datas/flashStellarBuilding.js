@@ -22,7 +22,7 @@ module.exports = [
             {
                 name: 2, image: "spatioport_open", workforce: 2,
                 levels: [
-                    { bonus: [{ from: "direct", to: "sys_mobility", value: 1 }, { from: "direct", to: "sys_mobility", value: 1 }], level: 1 },
+                    { bonus: [{ from: "direct", to: "sys_mobility", value: 5 }, { from: "direct", to: "sys_credit", value: 60 }], level: 1 },
                 ],
             },
             {

@@ -303,7 +303,17 @@ export default {
   data() {
     return {
       selectedTile: [0, 1, "habitable"],
-      emptyBuilding: { name: "Empty", image: "empty", workforce: 0 },
+      emptyBuilding: {
+        name: "Empty",
+        image: "empty",
+        workforce: 0,
+        levels: [
+          {
+            bonus: [],
+            level: 1,
+          },
+        ],
+      },
       infra: {
         name: 0,
         image: "infra_dome",
@@ -342,11 +352,13 @@ export default {
         credit: 0,
         technology: 0,
         mobility: 0,
-        defense: 3,
+        defense: 0,
         ci: 0,
         remove_contact: 0,
         radar: 1,
-        defFromHabitation: 3,
+        defFromHabitation: 0,
+        defBonus: 1,
+        monolithBonus: 0,
         planets: [
           {
             planetId: 0,
@@ -383,12 +395,14 @@ export default {
     // Add building slots to the default system
     async setUpSystem() {
       this.system.planets[0].buildings.push(this.infra);
-      await this.addBuildingValues(this.infra.levels[0].bonus, 0, false);
+      await this.addBuildingValues(this.infra.levels[0].bonus[0], 0, false);
+      await this.addBuildingValues(this.infra.levels[0].bonus[1], 0, false);
       for (let i = 1; i < 8; i++) {
         this.system.planets[0].buildings.push(this.emptyBuilding);
       }
       this.system.planets[1].buildings.push(this.infra);
-      await this.addBuildingValues(this.infra.levels[0].bonus, 1, false);
+      await this.addBuildingValues(this.infra.levels[0].bonus[0], 1, false);
+      await this.addBuildingValues(this.infra.levels[0].bonus[1], 1, false);
       for (let i = 1; i < 8; i++) {
         this.system.planets[1].buildings.push(this.emptyBuilding);
       }
@@ -418,7 +432,12 @@ export default {
         act: 5,
       });
       await this.addBuildingValues(
-        this.infra.levels[0].bonus,
+        this.infra.levels[0].bonus[0],
+        newPlanetId,
+        false
+      );
+      await this.addBuildingValues(
+        this.infra.levels[0].bonus[1],
         newPlanetId,
         false
       );
@@ -441,7 +460,9 @@ export default {
           this.system.planets[i].buildings.forEach((build) => {
             this.system.workforce -= build.workforce;
             if (build.levels !== undefined) {
-              this.addBuildingValues(build.levels[0].bonus, i, true);
+              build.levels[0].bonus.forEach(async (bonus) => {
+                await this.addBuildingValues(bonus, i, true);
+              });
             }
           });
           this.system.planets.splice(i, 1);
@@ -461,11 +482,9 @@ export default {
           ];
         if (currBuilding.name !== "Empty") {
           if (currBuilding.levels !== undefined) {
-            await this.addBuildingValues(
-              currBuilding.levels[0].bonus,
-              this.selectedTile[0],
-              true
-            );
+            currBuilding.levels[0].bonus.forEach(async (bonus) => {
+              await this.addBuildingValues(bonus, this.selectedTile[0], true);
+            });
           }
         }
         this.system.workforce -= currBuilding.workforce;
@@ -474,107 +493,144 @@ export default {
         ] = building;
         this.system.workforce += building.workforce;
         if (building.levels !== undefined) {
-          await this.addBuildingValues(
-            building.levels[0].bonus,
-            this.selectedTile[0],
-            false
-          );
+          building.levels[0].bonus.forEach(async (bonus) => {
+            await this.addBuildingValues(bonus, this.selectedTile[0], false);
+          });
+          // await this.addBuildingValues(
+          //   building.levels[0].bonus,
+          //   this.selectedTile[0],
+          //   false
+          // );
         }
       }
     },
-    addBuildingValues(buildingBonuses, planetIndex, substractValues) {
+    async addBuildingValues(buildingBonuses, planetIndex, substractValues) {
       if (substractValues) {
-        for (let i = 0; i < buildingBonuses.length; i++) {
-          buildingBonuses[i].value *= -1;
-        }
+        buildingBonuses.value *= -1;
       }
       let valueToAssign;
-      buildingBonuses.forEach((bonus) => {
-        switch (bonus.from) {
-          case "direct":
-            valueToAssign = bonus.value;
-            break;
-          case "body_pop":
+      const bonus = buildingBonuses;
+      switch (bonus.from) {
+        case "direct":
+          valueToAssign = bonus.value;
+          break;
+        case "body_pop":
+          valueToAssign =
+            bonus.value * this.system.planets[planetIndex].planetHabitation;
+          break;
+        case "body_ind":
+          valueToAssign = bonus.value * this.system.planets[planetIndex].ind;
+          break;
+        case "body_tec":
+          valueToAssign = bonus.value * this.system.planets[planetIndex].tec;
+          break;
+        case "body_act":
+          valueToAssign = bonus.value * this.system.planets[planetIndex].act;
+          break;
+        case "sys_mobility":
+          valueToAssign = bonus.value * this.system.mobility;
+          break;
+        case "sys_pop":
+          valueToAssign = bonus.value * this.system.habitation;
+          if (!substractValues) {
+            this.system.monolithBonus = bonus.value;
+          } else {
+            this.system.monolithBonus = 0;
+          }
+          break;
+        case "sys_defense":
+          if (!substractValues) {
+            this.system.defense += bonus.value * this.system.defense;
+            this.system.defBonus = 1 + bonus.value;
+            this.system.defFromHabitation *= this.system.defBonus;
+            return;
+          } else {
             valueToAssign =
-              bonus.value * this.system.planets[planetIndex].planetHabitation;
-            break;
-          case "body_ind":
-            valueToAssign = bonus.value * this.system.planets[planetIndex].ind;
-            break;
-          case "body_tec":
-            valueToAssign = bonus.value * this.system.planets[planetIndex].tec;
-            break;
-          case "body_act":
-            valueToAssign = bonus.value * this.system.planets[planetIndex].act;
-            break;
-          case "sys_pop":
-            valueToAssign = bonus.value * this.system.habitation;
-            break;
-          case "sys_defense":
-            if (!substractValues) {
-              valueToAssign = bonus.value * this.system.defense;
-            } else {
-              valueToAssign =
-                (-1 * this.system.defense) / (1 + -1 * bonus.value);
-            }
+              this.system.defense + this.system.defense / (-1 + bonus.value);
+            valueToAssign *= -1;
+            this.system.defFromHabitation /= 1 + -1 * bonus.value;
+            this.system.defBonus = 1;
+          }
 
-            break;
-        }
-        switch (bonus.to) {
-          case "sys_habitation":
-            this.system.defense -= this.system.defFromHabitation;
-            this.system.habitation += valueToAssign;
-            this.system.happiness -= valueToAssign;
-            this.system.planets[planetIndex].planetHabitation += valueToAssign;
-            this.system.defFromHabitation =
-              Math.round(this.system.habitation * 0.15 * 10) / 10;
-            this.system.defense += this.system.defFromHabitation;
-            this.system.credit +=
-              valueToAssign * this.system.mobility * 0.1 + valueToAssign * 2;
-            this.system.credit = Math.round(this.system.credit * 10) / 10;
-            break;
-          case "sys_happiness":
-            this.system.happiness += valueToAssign;
-            break;
-          case "sys_production":
-            this.system.production += valueToAssign;
-            break;
-          case "sys_ideology":
-            this.system.ideology += valueToAssign;
-            break;
-          case "sys_credit":
-            this.system.credit += valueToAssign;
-            break;
-          case "sys_technology":
-            this.system.technology += valueToAssign;
-            break;
-          case "sys_mobility":
-            this.system.credit += this.system.habitation * valueToAssign * 0.1;
-            this.system.credit = Math.round(this.system.credit * 10) / 10;
-            this.system.mobility += valueToAssign;
-            break;
-          case "sys_defense":
-            this.system.defense += valueToAssign;
-            break;
-          case "sys_remove_contact":
-            this.system.remove_contact += valueToAssign;
-            break;
-          case "sys_ci":
-            this.system.ci += valueToAssign;
-            break;
-          case "sys_radar":
-            this.system.radar += valueToAssign;
-            break;
+          break;
+      }
+      switch (bonus.to) {
+        case "sys_habitation":
+          this.system.defense -= this.system.defFromHabitation;
+          this.updateFromBodyPop(planetIndex, valueToAssign);
+          this.system.habitation += valueToAssign;
+          this.system.happiness =
+            Math.round((this.system.happiness - valueToAssign) * 10) / 10;
+          this.system.planets[planetIndex].planetHabitation += valueToAssign;
+          this.system.defFromHabitation =
+            Math.round(
+              this.system.habitation * 0.15 * this.system.defBonus * 10
+            ) / 10;
+          this.system.defense += this.system.defFromHabitation;
+          this.system.credit +=
+            valueToAssign * this.system.mobility * 0.1 + valueToAssign * 2;
+          this.system.credit = Math.round(this.system.credit * 10) / 10;
+          this.system.ideology += this.system.monolithBonus * valueToAssign;
+          this.system.ideology = Math.round(this.system.ideology * 10) / 10;
+          break;
+        case "sys_happiness":
+          this.system.happiness =
+            Math.round((this.system.happiness + valueToAssign) * 10) / 10;
+          break;
+        case "sys_production":
+          this.system.production += valueToAssign;
+          break;
+        case "sys_ideology":
+          this.system.ideology += valueToAssign;
+          break;
+        case "sys_credit":
+          this.system.credit += valueToAssign;
+          break;
+        case "sys_technology":
+          this.system.technology += valueToAssign;
+          break;
+        case "sys_mobility":
+          this.system.credit += this.system.habitation * valueToAssign * 0.1;
+          this.system.credit = Math.round(this.system.credit * 10) / 10;
+          this.system.mobility += valueToAssign;
+          break;
+        case "sys_defense":
+          this.system.defense =
+            Math.round(
+              (valueToAssign * this.system.defBonus + this.system.defense) * 10
+            ) / 10;
+          break;
+        case "sys_remove_contact":
+          this.system.remove_contact += valueToAssign;
+          break;
+        case "sys_ci":
+          this.system.ci += valueToAssign;
+          break;
+        case "sys_radar":
+          this.system.radar += valueToAssign;
+          break;
 
-          default:
-            console.log("default");
-        }
-      });
+        default:
+          console.log("default");
+      }
 
       if (substractValues) {
-        for (let i = 0; i < buildingBonuses.length; i++) {
-          buildingBonuses[i].value *= -1;
-        }
+        buildingBonuses.value *= -1;
+      }
+    },
+    updateFromBodyPop(planetId, addedPop) {
+      for (let i = 1; i < this.system.planets[planetId].buildings.length; i++) {
+        this.system.planets[planetId].buildings[i].levels[0].bonus.forEach(
+          async (bon) => {
+            if (bon.from === "body_pop") {
+              await this.addBuildingValues(
+                { from: "direct", to: bon.to, value: bon.value * addedPop },
+                planetId,
+                false
+              );
+            }
+          }
+        );
       }
     },
     // Select a tile and display corresponding building list
