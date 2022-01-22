@@ -1,111 +1,130 @@
 <template>
   <div class="card">
-    <table class="tableProd">
-      <tr>
-        <td class="tdProd">
-          <img
-            src="@/assets/system/defense_light.svg"
-            class="iconProd"
-            alt="Defense"
-          />
-        </td>
-        <td class="tdProd" style="padding-right: 2rem">
-          <span class="displayProd">{{ system.defense }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/credit_light.svg"
-            class="iconProd"
-            alt="Credit"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.credit }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/technology_light.svg"
-            class="iconProd"
-            alt="Technology"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.technology }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/ideology_light.svg"
-            class="iconProd"
-            alt="Ideology"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.ideology }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/production_light.svg"
-            class="iconProd"
-            alt="Production"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.production }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/happiness_light.svg"
-            class="iconProd"
-            alt="Happiness"
-          />
-        </td>
-        <td class="tdProd" style="padding-right: 2rem">
-          <span class="displayProd">{{ system.happiness }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/mobility_light.svg"
-            class="iconProd"
-            alt="Mobility"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.mobility }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/counter_intelligence_light.svg"
-            class="iconProd"
-            alt="CI"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.ci }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/remove_contact_light.svg"
-            class="iconProd"
-            alt="Remove_contact"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.remove_contact }}</span>
-        </td>
-        <td class="tdProd">
-          <img
-            src="@/assets/resource/radar_light.svg"
-            class="iconProd"
-            alt="Radar"
-          />
-        </td>
-        <td class="tdProd">
-          <span class="displayProd">{{ system.radar }}</span>
-        </td>
-      </tr>
-    </table>
+    <div>
+      <input
+        type="checkbox"
+        id="dominion"
+        name="dominion"
+        v-model="dominion"
+        v-on:change="setDominion()"
+      />
+      <label for="dominion">{{ $t("dominion") }}</label>
+      <table class="tableProd">
+        <tr>
+          <td class="tdProd">
+            <img
+              src="@/assets/system/defense_light.svg"
+              class="iconProd"
+              alt="Defense"
+            />
+          </td>
+          <td class="tdProd" style="padding-right: 2rem">
+            <span class="displayProd">{{ system.defense }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/credit_light.svg"
+              class="iconProd"
+              alt="Credit"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.credit }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/technology_light.svg"
+              class="iconProd"
+              alt="Technology"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.technology }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/ideology_light.svg"
+              class="iconProd"
+              alt="Ideology"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.ideology }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/production_light.svg"
+              class="iconProd"
+              alt="Production"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.production }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/happiness_light.svg"
+              class="iconProd"
+              alt="Happiness"
+            />
+          </td>
+          <td class="tdProd" style="padding-right: 2rem">
+            <span class="displayProd">{{ system.happiness }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/mobility_light.svg"
+              class="iconProd"
+              alt="Mobility"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.mobility }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/counter_intelligence_light.svg"
+              class="iconProd"
+              alt="CI"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.ci }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/remove_contact_light.svg"
+              class="iconProd"
+              alt="Remove_contact"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.remove_contact }}</span>
+          </td>
+          <td class="tdProd">
+            <img
+              src="@/assets/resource/radar_light.svg"
+              class="iconProd"
+              alt="Radar"
+            />
+          </td>
+          <td class="tdProd">
+            <span class="displayProd">{{ system.radar }}</span>
+          </td>
+        </tr>
+      </table>
+
+      <input
+        type="checkbox"
+        id="startingSystem"
+        name="startingSystem"
+        v-model="startingSystem"
+        v-on:change="setStartingSystem()"
+      />
+      <label for="startingSystem">{{ $t("startingSystem") }}</label>
+    </div>
     <section class="container">
       <div class="leftDiv">
         <table style="display: inline-block; float: left">
@@ -303,6 +322,8 @@ export default {
   data() {
     return {
       selectedTile: [0, 1, "habitable"],
+      dominion: false,
+      startingSystem: false,
       emptyBuilding: {
         name: "Empty",
         image: "empty",
@@ -346,7 +367,7 @@ export default {
       system: {
         workforce: 4,
         habitation: 0,
-        happiness: 35,
+        happiness: 35, // 12 en Flash
         production: 40,
         ideology: 0,
         credit: 0,
@@ -496,11 +517,6 @@ export default {
           building.levels[0].bonus.forEach(async (bonus) => {
             await this.addBuildingValues(bonus, this.selectedTile[0], false);
           });
-          // await this.addBuildingValues(
-          //   building.levels[0].bonus,
-          //   this.selectedTile[0],
-          //   false
-          // );
         }
       }
     },
@@ -556,17 +572,21 @@ export default {
       }
       switch (bonus.to) {
         case "sys_habitation":
-          this.system.defense -= this.system.defFromHabitation;
           this.updateFromBodyPop(planetIndex, valueToAssign);
           this.system.habitation += valueToAssign;
           this.system.happiness =
             Math.round((this.system.happiness - valueToAssign) * 10) / 10;
           this.system.planets[planetIndex].planetHabitation += valueToAssign;
-          this.system.defFromHabitation =
-            Math.round(
-              this.system.habitation * 0.15 * this.system.defBonus * 10
-            ) / 10;
-          this.system.defense += this.system.defFromHabitation;
+
+          if (!this.dominion) {
+            this.system.defense -= this.system.defFromHabitation;
+            this.system.defFromHabitation =
+              Math.round(
+                this.system.habitation * 0.15 * this.system.defBonus * 10
+              ) / 10;
+            this.system.defense += this.system.defFromHabitation;
+          }
+
           this.system.credit +=
             valueToAssign * this.system.mobility * 0.1 + valueToAssign * 2;
           this.system.credit = Math.round(this.system.credit * 10) / 10;
@@ -630,6 +650,46 @@ export default {
               );
             }
           }
+        );
+      }
+    },
+    async setStartingSystem() {
+      if (this.startingSystem)
+        await this.addBuildingValues(
+          { from: "direct", to: "sys_production", value: 30 },
+          0,
+          false
+        );
+      else
+        await this.addBuildingValues(
+          { from: "direct", to: "sys_production", value: 30 },
+          0,
+          true
+        );
+    },
+    async setDominion() {
+      if (this.dominion) {
+        await this.addBuildingValues(
+          {
+            from: "direct",
+            to: "sys_defense",
+            value: this.system.defFromHabitation,
+          },
+          0,
+          true
+        );
+        this.defFromHabitation = 0;
+      } else {
+        this.system.defFromHabitation =
+          Math.round(this.system.habitation * 0.15 * 10) / 10;
+        await this.addBuildingValues(
+          {
+            from: "direct",
+            to: "sys_defense",
+            value: this.system.defFromHabitation,
+          },
+          0,
+          false
         );
       }
     },
