@@ -1,14 +1,6 @@
 <template>
   <div>
     <ul>
-      <li style="float: center">
-        <router-link
-          v-for="route in routeList"
-          :key="route.name"
-          :to="route.route"
-          >{{ route.name }}</router-link
-        >
-      </li>
       <li style="float: right">
         <button class="active_button" ref="en" @click="setLanguage('en')">
           EN
@@ -17,6 +9,32 @@
           FR
         </button>
         <router-link to="/about">{{ $t("about") }}</router-link>
+      </li>
+      <!-- <li> -->
+      <li style="float: center">
+        <router-link
+          v-for="route in routeList"
+          :key="route.name"
+          :to="route.route"
+          >{{ route.name }}</router-link
+        >
+      </li>
+      <li style="float: left">
+        <button
+          class="inactive_button"
+          ref="flash"
+          @click="setGameSpeed('flash')"
+          style="margin-left: 1rem"
+        >
+          FLASH
+        </button>
+        <button
+          class="active_button"
+          ref="legacy"
+          @click="setGameSpeed('legacy')"
+        >
+          LEGACY
+        </button>
       </li>
     </ul>
   </div>
@@ -37,6 +55,7 @@ export default {
           i18name: "costCalculator",
         },
       ],
+      currentSpeed: "legacy",
     };
   },
   methods: {
@@ -50,6 +69,15 @@ export default {
           elem.name = this.$t(elem.i18name);
         });
         this.replaceInactiveButton(newLang);
+      }
+    },
+    setGameSpeed(newSpeed) {
+      if (newSpeed !== this.currentSpeed) {
+        this.replaceActiveButton(this.currentSpeed);
+        this.$cookie.setCookie("gameSpeed", newSpeed);
+        this.$emit("speedChanged", newSpeed);
+        this.replaceInactiveButton(newSpeed);
+        this.currentSpeed = newSpeed;
       }
     },
     // Replace active button class to inactive button class on given ref
@@ -73,6 +101,13 @@ export default {
       this.setLanguage(this.$cookie.getCookie("locale"));
     } else {
       this.$cookie.setCookie("locale", "en");
+    }
+    // Check if speed cookie exists and set the speed accordingly
+    if (this.$cookie.isCookieAvailable("gameSpeed")) {
+      this.setGameSpeed(this.$cookie.getCookie("gameSpeed"));
+    } else {
+      this.setGameSpeed("legacy");
+      this.$cookie.setCookie("gameSpeed", "legacy");
     }
   },
 };
@@ -111,7 +146,7 @@ li a {
   margin-top: 0.65rem;
   margin-bottom: 0.65rem;
   margin-left: 0.2rem;
-  border-radius: 15%;
+  border-radius: 0.3rem;
 }
 .active_button:hover {
   background-color: #8752c0;
@@ -122,7 +157,7 @@ li a {
   margin-top: 0.7rem;
   margin-bottom: 0.7rem;
   margin-left: 0.2rem;
-  border-radius: 15%;
+  border-radius: 0.3rem;
 }
 .inactive_button:hover {
   background-color: #8752c0;

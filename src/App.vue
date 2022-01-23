@@ -1,6 +1,6 @@
 <template class="app">
-  <Navbar />
-  <router-view />
+  <Navbar @speedChanged="changeSpeed" />
+  <router-view v-bind:gameSpeed="speed" />
 </template>
 <script>
 import Navbar from "./components/navbar";
@@ -8,6 +8,16 @@ import Navbar from "./components/navbar";
 export default {
   name: "App",
   components: { Navbar },
+  data: function () {
+    return {
+      speed: "legacy",
+    };
+  },
+  methods: {
+    changeSpeed(value) {
+      this.speed = value;
+    },
+  },
 };
 </script>
 <style>

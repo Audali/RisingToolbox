@@ -328,19 +328,29 @@
   </div>
 </template>
 <script>
-// const habitableBuildingList = require("../datas/flashHabitableBuilding.js");
-// const sterileBuildingList = require("../datas/flashSterileBuilding.js");
-// const stellarBuildingList = require("../datas/flashStellarBuilding.js");
-const habitableBuildingList = require("../datas/habitableBuilding.js");
-const sterileBuildingList = require("../datas/sterileBuilding.js");
-const stellarBuildingList = require("../datas/stellarBuilding.js");
+const flashHabitableBuildingList = require("../datas/flashHabitableBuilding.js");
+const flashSterileBuildingList = require("../datas/flashSterileBuilding.js");
+const flashStellarBuildingList = require("../datas/flashStellarBuilding.js");
+const legacyHabitableBuildingList = require("../datas/habitableBuilding.js");
+const legacySterileBuildingList = require("../datas/sterileBuilding.js");
+const legacyStellarBuildingList = require("../datas/stellarBuilding.js");
 export default {
   name: "Planner",
+  props: {
+    gameSpeed: String,
+  },
   data() {
     return {
+      stellarBuildingList: [],
+      habitableBuildingList: [],
+      sterileBuildingList: [],
       selectedTile: [0, 1, "habitable"],
       dominion: false,
       startingSystem: false,
+      flashStartingProduction: 40,
+      legacyStartingProduction: 100,
+      flashStartingHappiness: 12,
+      legacyStartingHappiness: 35,
       emptyBuilding: {
         name: "Empty",
         image: "empty",
@@ -352,8 +362,9 @@ export default {
           },
         ],
       },
-      infra: {
-        name: 0,
+      infra: {},
+      legacyInfra: {
+        name: "infra_dome",
         image: "infra_dome",
         workforce: 2,
         levels: [
@@ -367,7 +378,7 @@ export default {
         ],
       },
       flashInfra: {
-        name: 0,
+        name: "infra_dome",
         image: "infra_dome",
         workforce: 2,
         levels: [
@@ -384,8 +395,8 @@ export default {
       system: {
         workforce: 4,
         habitation: 0,
-        happiness: 35, // 12 en Flash
-        production: 40,
+        happiness: 0,
+        production: 0,
         ideology: 0,
         credit: 0,
         technology: 0,
@@ -436,8 +447,8 @@ export default {
         building: this.infra,
         hover: false,
       });
-      await this.addBuildingValues(this.infra.levels[0].bonus[0], 0, false);
-      await this.addBuildingValues(this.infra.levels[0].bonus[1], 0, false);
+      await this.addBonusValue(this.infra.levels[0].bonus[0], 0, false);
+      await this.addBonusValue(this.infra.levels[0].bonus[1], 0, false);
       for (let i = 1; i < 8; i++) {
         this.system.planets[0].buildings.push({
           building: this.emptyBuilding,
@@ -448,8 +459,8 @@ export default {
         building: this.infra,
         hover: false,
       });
-      await this.addBuildingValues(this.infra.levels[0].bonus[0], 1, false);
-      await this.addBuildingValues(this.infra.levels[0].bonus[1], 1, false);
+      await this.addBonusValue(this.infra.levels[0].bonus[0], 1, false);
+      await this.addBonusValue(this.infra.levels[0].bonus[1], 1, false);
       for (let i = 1; i < 8; i++) {
         this.system.planets[1].buildings.push({
           building: this.emptyBuilding,
@@ -486,12 +497,12 @@ export default {
           hover: false,
         });
         this.system.workforce += 2;
-        await this.addBuildingValues(
+        await this.addBonusValue(
           this.infra.levels[0].bonus[0],
           newPlanetId,
           false
         );
-        await this.addBuildingValues(
+        await this.addBonusValue(
           this.infra.levels[0].bonus[1],
           newPlanetId,
           false
@@ -520,7 +531,7 @@ export default {
             this.system.workforce -= build.building.workforce;
             if (build.building.levels !== undefined) {
               build.building.levels[0].bonus.forEach(async (bonus) => {
-                await this.addBuildingValues(bonus, i, true);
+                await this.addBonusValue(bonus, i, true);
               });
             }
           });
@@ -540,7 +551,7 @@ export default {
         if (currBuilding.name !== "Empty") {
           if (currBuilding.levels !== undefined) {
             currBuilding.levels[0].bonus.forEach(async (bonus) => {
-              await this.addBuildingValues(bonus, planetId, true);
+              await this.addBonusValue(bonus, planetId, true);
             });
           }
         }
@@ -549,7 +560,7 @@ export default {
         this.system.workforce += building.workforce;
         if (building.levels !== undefined) {
           building.levels[0].bonus.forEach(async (bonus) => {
-            await this.addBuildingValues(bonus, planetId, false);
+            await this.addBonusValue(bonus, planetId, false);
           });
         }
       }
@@ -561,7 +572,7 @@ export default {
         this.setBuilding(this.emptyBuilding, planetId, tileId);
       }
     },
-    async addBuildingValues(buildingBonuses, planetIndex, substractValues) {
+    async addBonusValue(buildingBonuses, planetIndex, substractValues) {
       if (substractValues) {
         buildingBonuses.value *= -1;
       }
@@ -619,7 +630,7 @@ export default {
             Math.round((this.system.happiness - valueToAssign) * 10) / 10;
           this.system.planets[planetIndex].planetHabitation += valueToAssign;
 
-          if (!this.dominion) {
+          if (!this.dominion && this.gameSpeed !== "flash") {
             this.system.defense -= this.system.defFromHabitation;
             this.system.defFromHabitation =
               Math.round(
@@ -685,7 +696,7 @@ export default {
           i
         ].building.levels[0].bonus.forEach(async (bon) => {
           if (bon.from === "body_pop") {
-            await this.addBuildingValues(
+            await this.addBonusValue(
               { from: "direct", to: bon.to, value: bon.value * addedPop },
               planetId,
               false
@@ -696,13 +707,13 @@ export default {
     },
     async setStartingSystem() {
       if (this.startingSystem)
-        await this.addBuildingValues(
+        await this.addBonusValue(
           { from: "direct", to: "sys_production", value: 30 },
           0,
           false
         );
       else
-        await this.addBuildingValues(
+        await this.addBonusValue(
           { from: "direct", to: "sys_production", value: 30 },
           0,
           true
@@ -710,7 +721,7 @@ export default {
     },
     async setDominion() {
       if (this.dominion) {
-        await this.addBuildingValues(
+        await this.addBonusValue(
           {
             from: "direct",
             to: "sys_defense",
@@ -723,7 +734,7 @@ export default {
       } else {
         this.system.defFromHabitation =
           Math.round(this.system.habitation * 0.15 * 10) / 10;
-        await this.addBuildingValues(
+        await this.addBonusValue(
           {
             from: "direct",
             to: "sys_defense",
@@ -743,11 +754,11 @@ export default {
         // If tile is not the first tile of an habitable or sterile planet
         if (newPlanetType !== this.selectedTile[2]) {
           if (newPlanetType === "moon" || newPlanetType === "asteroid") {
-            this.buildListToDisplay = stellarBuildingList;
+            this.buildListToDisplay = this.stellarBuildingList;
           } else if (newPlanetType === "habitable") {
-            this.buildListToDisplay = habitableBuildingList;
+            this.buildListToDisplay = this.habitableBuildingList;
           } else if (newPlanetType === "sterile") {
-            this.buildListToDisplay = sterileBuildingList;
+            this.buildListToDisplay = this.sterileBuildingList;
           }
         }
         if (this.selectedTile[0] !== -1) {
@@ -757,6 +768,24 @@ export default {
         }
         this.selectedTile = [planetId, tileId, newPlanetType];
         this.setSelectedTileButton("slot" + planetId + "_" + tileId);
+      }
+    },
+    setBuildingLists(speed, planetType) {
+      if (speed === "legacy") {
+        this.habitableBuildingList = legacyHabitableBuildingList;
+        this.stellarBuildingList = legacyStellarBuildingList;
+        this.sterileBuildingList = legacySterileBuildingList;
+      } else if (speed === "flash") {
+        this.habitableBuildingList = flashHabitableBuildingList;
+        this.stellarBuildingList = flashStellarBuildingList;
+        this.sterileBuildingList = flashSterileBuildingList;
+      }
+      if (planetType === "moon" || planetType === "asteroid") {
+        this.buildListToDisplay = this.stellarBuildingList;
+      } else if (planetType === "habitable") {
+        this.buildListToDisplay = this.habitableBuildingList;
+      } else if (planetType === "sterile") {
+        this.buildListToDisplay = this.sterileBuildingList;
       }
     },
     // Replace active button class to inactive button class on given ref
@@ -789,9 +818,172 @@ export default {
     },
   },
   async mounted() {
-    this.buildListToDisplay = habitableBuildingList;
+    await this.setBuildingLists(this.gameSpeed, "habitable");
+    if (this.gameSpeed === "legacy") {
+      this.system.production = this.legacyStartingProduction;
+      this.system.happiness = this.legacyStartingHappiness;
+      this.infra = this.legacyInfra;
+    } else if (this.gameSpeed === "flash") {
+      this.system.production = this.flashStartingProduction;
+      this.system.happiness = this.flashStartingHappiness;
+      this.infra = this.flashInfra;
+    }
     await this.setUpSystem();
     this.setSelectedTileButton("slot" + 0 + "_" + 1);
+  },
+  watch: {
+    gameSpeed: async function (newval) {
+      for (
+        let planetId = 0;
+        planetId < this.system.planets.length;
+        planetId++
+      ) {
+        for (
+          let i = 1;
+          i < this.system.planets[planetId].buildings.length;
+          i++
+        ) {
+          if (
+            this.system.planets[planetId].buildings[i].building.name !== "Empty"
+          ) {
+            this.system.planets[planetId].buildings[
+              i
+            ].building.levels[0].bonus.forEach(async (bon) => {
+              await this.addBonusValue(bon, planetId, true);
+            });
+          }
+        }
+      }
+      await this.setBuildingLists(newval, this.selectedTile[2]);
+      let oldProd;
+      let newProd;
+      let oldHapp;
+      let newHapp;
+      let oldInfra = this.infra;
+      if (newval === "legacy") {
+        newProd = this.legacyStartingProduction;
+        oldProd = this.flashStartingProduction;
+        newHapp = this.legacyStartingHappiness;
+        oldHapp = this.flashStartingHappiness;
+        this.infra = this.legacyInfra;
+      } else if (newval === "flash") {
+        oldProd = this.legacyStartingProduction;
+        newProd = this.flashStartingProduction;
+        oldHapp = this.legacyStartingHappiness;
+        newHapp = this.flashStartingHappiness;
+        this.infra = this.flashInfra;
+      }
+
+      await this.addBonusValue(
+        { from: "direct", to: "sys_production", value: oldProd },
+        0,
+        true
+      );
+      await this.addBonusValue(
+        { from: "direct", to: "sys_production", value: newProd },
+        0,
+        false
+      );
+      await this.addBonusValue(
+        { from: "direct", to: "sys_happiness", value: oldHapp },
+        0,
+        true
+      );
+      await this.addBonusValue(
+        { from: "direct", to: "sys_happiness", value: newHapp },
+        0,
+        false
+      );
+
+      for (
+        let planetId = 0;
+        planetId < this.system.planets.length;
+        planetId++
+      ) {
+        for (
+          let i = 0;
+          i < this.system.planets[planetId].buildings.length;
+          i++
+        ) {
+          if (
+            this.system.planets[planetId].buildings[i].building.name !==
+              "Empty" &&
+            this.system.planets[planetId].buildings[i].building.name !==
+              "infra_dome"
+          ) {
+            let planetType = this.system.planets[planetId].planetType;
+            let buildListToSearch;
+            let correspondingBuilding;
+
+            if (planetType === "moon" || planetType === "asteroid") {
+              buildListToSearch = this.stellarBuildingList;
+            } else if (planetType === "habitable") {
+              buildListToSearch = this.habitableBuildingList;
+            } else if (planetType === "sterile") {
+              buildListToSearch = this.sterileBuildingList;
+            }
+
+            for (var buildLine in buildListToSearch) {
+              for (var building in buildListToSearch[buildLine].buildings) {
+                if (
+                  buildListToSearch[buildLine].buildings[building].image ===
+                  this.system.planets[planetId].buildings[i].building.image
+                ) {
+                  correspondingBuilding =
+                    buildListToSearch[buildLine].buildings[building];
+                  break;
+                }
+              }
+              if (correspondingBuilding !== undefined) break;
+            }
+            if (correspondingBuilding !== undefined) {
+              correspondingBuilding.levels[0].bonus.forEach(async (bon) => {
+                await this.addBonusValue(bon, planetId, false);
+              });
+              this.system.planets[planetId].buildings[i].building =
+                correspondingBuilding;
+            } else {
+              this.system.planets[planetId].buildings[i].building =
+                this.emptyBuilding;
+            }
+          } else if (
+            this.system.planets[planetId].buildings[i].building.name ===
+            "infra_dome"
+          ) {
+            this.system.planets[planetId].buildings[i].building = this.infra;
+            await this.addBonusValue(
+              oldInfra.levels[0].bonus[0],
+              planetId,
+              true
+            );
+            await this.addBonusValue(
+              oldInfra.levels[0].bonus[1],
+              planetId,
+              true
+            );
+            await this.addBonusValue(
+              this.infra.levels[0].bonus[0],
+              planetId,
+              false
+            );
+            await this.addBonusValue(
+              this.infra.levels[0].bonus[1],
+              planetId,
+              false
+            );
+          }
+        }
+      }
+      let defHab = this.system.defFromHabitation;
+      if (newval === "flash") {
+        await this.addBonusValue(
+          { from: "direct", to: "sys_defense", value: defHab },
+          0,
+          true
+        );
+        defHab = 0;
+      }
+    },
   },
 };
 </script>
