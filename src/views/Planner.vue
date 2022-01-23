@@ -246,18 +246,33 @@
                 </span>
               </td>
               <td v-for="(building, index) in planet.buildings" :key="index">
-                <button
-                  class="active_button"
-                  :ref="'slot' + planet.planetId + '_' + index"
-                  @click="selectTile(planet.planetId, index, planet.planetType)"
-                >
-                  <img
-                    :src="
-                      require('@/assets/building/' + building.image + '.svg')
+                <div style="position: relative; width: 100%">
+                  <button
+                    class="active_button"
+                    :ref="'slot' + planet.planetId + '_' + index"
+                    @click="
+                      selectTile(planet.planetId, index, planet.planetType)
                     "
-                    :alt="building.image"
-                  />
-                </button>
+                    @mouseover="building.hover = true"
+                    @mouseleave="building.hover = false"
+                  >
+                    <img
+                      :src="
+                        require('@/assets/building/' +
+                          building.building.image +
+                          '.svg')
+                      "
+                      :alt="building.building.image"
+                    />
+                    <button
+                      v-show="building.hover"
+                      style="position: absolute; top: 60%; left: 60%"
+                      @click="deleteBuilding(planet.planetId, index)"
+                    >
+                      x
+                    </button>
+                  </button>
+                </div>
               </td>
               <td
                 v-if="
@@ -293,7 +308,9 @@
                 <button
                   class="active_button"
                   :ref="'production' + building"
-                  @click="setBuilding(building)"
+                  @click="
+                    setBuilding(building, selectedTile[0], selectedTile[1])
+                  "
                 >
                   <img
                     :src="
@@ -415,20 +432,35 @@ export default {
   methods: {
     // Add building slots to the default system
     async setUpSystem() {
-      this.system.planets[0].buildings.push(this.infra);
+      this.system.planets[0].buildings.push({
+        building: this.infra,
+        hover: false,
+      });
       await this.addBuildingValues(this.infra.levels[0].bonus[0], 0, false);
       await this.addBuildingValues(this.infra.levels[0].bonus[1], 0, false);
       for (let i = 1; i < 8; i++) {
-        this.system.planets[0].buildings.push(this.emptyBuilding);
+        this.system.planets[0].buildings.push({
+          building: this.emptyBuilding,
+          hover: false,
+        });
       }
-      this.system.planets[1].buildings.push(this.infra);
+      this.system.planets[1].buildings.push({
+        building: this.infra,
+        hover: false,
+      });
       await this.addBuildingValues(this.infra.levels[0].bonus[0], 1, false);
       await this.addBuildingValues(this.infra.levels[0].bonus[1], 1, false);
       for (let i = 1; i < 8; i++) {
-        this.system.planets[1].buildings.push(this.emptyBuilding);
+        this.system.planets[1].buildings.push({
+          building: this.emptyBuilding,
+          hover: false,
+        });
       }
       for (let i = 0; i < 3; i++) {
-        this.system.planets[2].buildings.push(this.emptyBuilding);
+        this.system.planets[2].buildings.push({
+          building: this.emptyBuilding,
+          hover: false,
+        });
       }
     },
     // Add planet to the planet list
@@ -436,35 +468,41 @@ export default {
       let tileNumber;
       let newPlanetId = this.system.planets.length;
       let emptyBuildings = [];
-      if (newPlanetType === "moon" || newPlanetType === "asteroid")
-        tileNumber = 3;
-      else {
-        tileNumber = 7;
-        emptyBuildings.push(this.infra);
-        this.system.workforce += 2;
-      }
       this.system.planets.push({
         planetId: newPlanetId,
         planetType: newPlanetType,
         buildings: emptyBuildings,
-        planetHabitation: 10,
+        planetHabitation: 0,
         ind: 5,
         tec: 5,
         act: 5,
       });
-      await this.addBuildingValues(
-        this.infra.levels[0].bonus[0],
-        newPlanetId,
-        false
-      );
-      await this.addBuildingValues(
-        this.infra.levels[0].bonus[1],
-        newPlanetId,
-        false
-      );
+      if (newPlanetType === "moon" || newPlanetType === "asteroid")
+        tileNumber = 3;
+      else {
+        tileNumber = 7;
+        emptyBuildings.push({
+          building: this.infra,
+          hover: false,
+        });
+        this.system.workforce += 2;
+        await this.addBuildingValues(
+          this.infra.levels[0].bonus[0],
+          newPlanetId,
+          false
+        );
+        await this.addBuildingValues(
+          this.infra.levels[0].bonus[1],
+          newPlanetId,
+          false
+        );
+      }
 
       for (let i = 0; i < tileNumber; i++) {
-        this.system.planets[newPlanetId].buildings.push(this.emptyBuilding);
+        this.system.planets[newPlanetId].buildings.push({
+          building: this.emptyBuilding,
+          hover: false,
+        });
       }
     },
     // Delete planet and change planetId of other planets
@@ -479,9 +517,9 @@ export default {
       for (var i = this.system.planets.length - 1; i >= 0; --i) {
         if (this.system.planets[i].planetId == delPlanetId) {
           this.system.planets[i].buildings.forEach((build) => {
-            this.system.workforce -= build.workforce;
-            if (build.levels !== undefined) {
-              build.levels[0].bonus.forEach(async (bonus) => {
+            this.system.workforce -= build.building.workforce;
+            if (build.building.levels !== undefined) {
+              build.building.levels[0].bonus.forEach(async (bonus) => {
                 await this.addBuildingValues(bonus, i, true);
               });
             }
@@ -495,29 +533,32 @@ export default {
       }
     },
     // Set the building on the currently selected tile
-    async setBuilding(building) {
-      if (this.selectedTile[0] !== -1) {
+    async setBuilding(building, planetId, tileId) {
+      if (planetId !== -1) {
         let currBuilding =
-          this.system.planets[this.selectedTile[0]].buildings[
-            this.selectedTile[1]
-          ];
+          this.system.planets[planetId].buildings[tileId].building;
         if (currBuilding.name !== "Empty") {
           if (currBuilding.levels !== undefined) {
             currBuilding.levels[0].bonus.forEach(async (bonus) => {
-              await this.addBuildingValues(bonus, this.selectedTile[0], true);
+              await this.addBuildingValues(bonus, planetId, true);
             });
           }
         }
         this.system.workforce -= currBuilding.workforce;
-        this.system.planets[this.selectedTile[0]].buildings[
-          this.selectedTile[1]
-        ] = building;
+        this.system.planets[planetId].buildings[tileId].building = building;
         this.system.workforce += building.workforce;
         if (building.levels !== undefined) {
           building.levels[0].bonus.forEach(async (bonus) => {
-            await this.addBuildingValues(bonus, this.selectedTile[0], false);
+            await this.addBuildingValues(bonus, planetId, false);
           });
         }
+      }
+    },
+    deleteBuilding(planetId, tileId) {
+      let currBuilding =
+        this.system.planets[planetId].buildings[tileId].building;
+      if (currBuilding.name !== "Empty") {
+        this.setBuilding(this.emptyBuilding, planetId, tileId);
       }
     },
     async addBuildingValues(buildingBonuses, planetIndex, substractValues) {
@@ -640,17 +681,17 @@ export default {
     },
     updateFromBodyPop(planetId, addedPop) {
       for (let i = 1; i < this.system.planets[planetId].buildings.length; i++) {
-        this.system.planets[planetId].buildings[i].levels[0].bonus.forEach(
-          async (bon) => {
-            if (bon.from === "body_pop") {
-              await this.addBuildingValues(
-                { from: "direct", to: bon.to, value: bon.value * addedPop },
-                planetId,
-                false
-              );
-            }
+        this.system.planets[planetId].buildings[
+          i
+        ].building.levels[0].bonus.forEach(async (bon) => {
+          if (bon.from === "body_pop") {
+            await this.addBuildingValues(
+              { from: "direct", to: bon.to, value: bon.value * addedPop },
+              planetId,
+              false
+            );
           }
-        );
+        });
       }
     },
     async setStartingSystem() {
