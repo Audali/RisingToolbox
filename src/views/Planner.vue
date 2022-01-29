@@ -363,7 +363,7 @@ export default {
       dominion: false,
       startingSystem: false,
       flashStartingProduction: 40,
-      legacyStartingProduction: 100,
+      legacyStartingProduction: 40,
       flashStartingHappiness: 12,
       legacyStartingHappiness: 35,
       emptyBuilding: {
@@ -427,38 +427,10 @@ export default {
         levels: [
           {
             bonus: [
-              { from: "direct", to: "sys_habitation", value: 10 },
-              { from: "direct", to: "sys_happiness", value: 2 },
+              { from: "direct", to: "sys_habitation", value: 8 },
+              { from: "direct", to: "sys_happiness", value: 12 },
             ],
             level: 1,
-          },
-          {
-            bonus: [
-              { from: "direct", to: "sys_habitation", value: 10 },
-              { from: "direct", to: "sys_happiness", value: 4 },
-            ],
-            level: 2,
-          },
-          {
-            bonus: [
-              { from: "direct", to: "sys_habitation", value: 10 },
-              { from: "direct", to: "sys_happiness", value: 6 },
-            ],
-            level: 3,
-          },
-          {
-            bonus: [
-              { from: "direct", to: "sys_habitation", value: 10 },
-              { from: "direct", to: "sys_happiness", value: 8 },
-            ],
-            level: 4,
-          },
-          {
-            bonus: [
-              { from: "direct", to: "sys_habitation", value: 10 },
-              { from: "direct", to: "sys_happiness", value: 10 },
-            ],
-            level: 5,
           },
         ],
       },
@@ -517,6 +489,7 @@ export default {
       this.system.planets[0].buildings.push({
         building: this.infra,
         hover: false,
+        level: 1,
       });
       await this.addBonusValue(this.infra.levels[0].bonus[0], 0, false);
       await this.addBonusValue(this.infra.levels[0].bonus[1], 0, false);
@@ -530,6 +503,7 @@ export default {
       this.system.planets[1].buildings.push({
         building: this.infra,
         hover: false,
+        level: 1,
       });
       await this.addBonusValue(this.infra.levels[0].bonus[0], 1, false);
       await this.addBonusValue(this.infra.levels[0].bonus[1], 1, false);
@@ -651,7 +625,13 @@ export default {
       let currBuilding =
         this.system.planets[planetId].buildings[tileId].building;
       if (currBuilding.name !== "Empty") {
-        this.setBuilding(this.emptyBuilding, planetId, tileId);
+        if (currBuilding.name !== "infra_dome") {
+          this.setBuilding(this.emptyBuilding, planetId, tileId);
+        } else {
+          for (var tile in this.system.planets[planetId].buildings) {
+            this.setBuilding(this.emptyBuilding, planetId, tile);
+          }
+        }
       }
     },
     async addBonusValue(buildingBonuses, planetIndex, substractValues) {
@@ -817,13 +797,13 @@ export default {
     async setStartingSystem() {
       if (this.startingSystem)
         await this.addBonusValue(
-          { from: "direct", to: "sys_production", value: 30 },
+          { from: "direct", to: "sys_production", value: 60 },
           0,
           false
         );
       else
         await this.addBonusValue(
-          { from: "direct", to: "sys_production", value: 30 },
+          { from: "direct", to: "sys_production", value: 60 },
           0,
           true
         );
@@ -904,6 +884,13 @@ export default {
         }
         this.selectedTile = [planetId, tileId, newPlanetType];
         this.setSelectedTileButton("slot" + planetId + "_" + tileId);
+      } else {
+        if (
+          this.system.planets[planetId].buildings[0].building.name === "Empty"
+        ) {
+          // console.log("a");
+          this.setBuilding(this.infra, planetId, 0);
+        }
       }
     },
     setBuildingLists(speed, planetType) {
