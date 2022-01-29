@@ -480,6 +480,7 @@ export default {
             act: 5,
           },
         ],
+        uniqueBuildings: [],
       },
     };
   },
@@ -597,6 +598,22 @@ export default {
     },
     // Set the building on the currently selected tile
     async setBuilding(building, planetId, tileId) {
+      if (building.limitation === "unique_body") {
+        for (var build in this.system.planets[planetId].buildings) {
+          if (
+            this.system.planets[planetId].buildings[build].building.key ===
+            building.key
+          ) {
+            return;
+          }
+        }
+      } else if (building.limitation === "unique_system") {
+        if (this.system.uniqueBuildings.indexOf(building.key) > -1) {
+          return;
+        } else {
+          this.system.uniqueBuildings.push(building.key);
+        }
+      }
       if (planetId !== -1) {
         let currBuilding = this.system.planets[planetId].buildings[tileId];
         if (currBuilding.name !== "Empty") {
@@ -605,6 +622,12 @@ export default {
               async (bonus) => {
                 await this.addBonusValue(bonus, planetId, true);
               }
+            );
+          }
+          if (currBuilding.limitation === "unique_system") {
+            this.system.uniqueBuildings.splice(
+              this.system.uniqueBuildings.indexOf(currBuilding.key),
+              1
             );
           }
         }
@@ -621,7 +644,7 @@ export default {
         }
       }
     },
-    deleteBuilding(planetId, tileId) {
+    async deleteBuilding(planetId, tileId) {
       let currBuilding =
         this.system.planets[planetId].buildings[tileId].building;
       if (currBuilding.name !== "Empty") {
@@ -632,6 +655,12 @@ export default {
             this.setBuilding(this.emptyBuilding, planetId, tile);
           }
         }
+      }
+      if (currBuilding.limitation === "unique_system") {
+        await this.system.uniqueBuildings.splice(
+          this.system.uniqueBuildings.indexOf(currBuilding.key),
+          1
+        );
       }
     },
     async addBonusValue(buildingBonuses, planetIndex, substractValues) {
@@ -847,14 +876,14 @@ export default {
         ) {
           currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
             async (bon) => {
-              console.log(bon);
+              // console.log(bon);
               await this.addBonusValue(bon, planetId, true);
             }
           );
           currBuilding.level += upDown;
           currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
             async (bon) => {
-              console.log(bon);
+              // console.log(bon);
               await this.addBonusValue(bon, planetId, false);
             }
           );
