@@ -130,7 +130,7 @@
         <table style="display: inline-block; float: left">
           <thead>
             <tr>
-              <th colspan="1">
+              <th colspan="2">
                 {{ system.workforce }}/{{ system.habitation }}
               </th>
               <th colspan="1">
@@ -259,18 +259,35 @@
                     <img
                       :src="
                         require('@/assets/building/' +
-                          building.building.image +
+                          building.building.key +
                           '.svg')
                       "
-                      :alt="building.building.image"
+                      :alt="building.building.key"
                     />
                     <button
                       v-show="building.hover"
-                      style="position: absolute; top: 60%; left: 60%"
+                      style="position: absolute; top: 70%; left: 65%"
                       @click="deleteBuilding(planet.planetId, index)"
                     >
                       x
                     </button>
+                    <button
+                      v-show="building.hover"
+                      style="position: absolute; top: -15%; left: -15%"
+                      @click="levelBuilding(planet.planetId, index, true)"
+                    >
+                      ^
+                    </button>
+                    <button
+                      v-show="building.hover"
+                      style="position: absolute; top: 70%; left: -15%"
+                      @click="levelBuilding(planet.planetId, index, false)"
+                    >
+                      ˅
+                    </button>
+                    <b style="position: absolute; top: 0%; left: 80%">
+                      {{ building.level }}
+                    </b>
                   </button>
                 </div>
               </td>
@@ -313,10 +330,8 @@
                   "
                 >
                   <img
-                    :src="
-                      require('@/assets/building/' + building.image + '.svg')
-                    "
-                    :alt="building.image"
+                    :src="require('@/assets/building/' + building.key + '.svg')"
+                    :alt="building.key"
                   />
                 </button>
               </td>
@@ -331,9 +346,9 @@
 const flashHabitableBuildingList = require("../datas/flashHabitableBuilding.js");
 const flashSterileBuildingList = require("../datas/flashSterileBuilding.js");
 const flashStellarBuildingList = require("../datas/flashStellarBuilding.js");
-const legacyHabitableBuildingList = require("../datas/habitableBuilding.js");
-const legacySterileBuildingList = require("../datas/sterileBuilding.js");
-const legacyStellarBuildingList = require("../datas/stellarBuilding.js");
+const legacyHabitableBuildingList = require("../datas/habitableBuilding.json");
+const legacySterileBuildingList = require("../datas/sterileBuilding.json");
+const legacyStellarBuildingList = require("../datas/stellarBuilding.json");
 export default {
   name: "Planner",
   props: {
@@ -353,7 +368,7 @@ export default {
       legacyStartingHappiness: 35,
       emptyBuilding: {
         name: "Empty",
-        image: "empty",
+        key: "empty",
         workforce: 0,
         levels: [
           {
@@ -365,7 +380,7 @@ export default {
       infra: {},
       legacyInfra: {
         name: "infra_dome",
-        image: "infra_dome",
+        key: "infra_dome",
         workforce: 2,
         levels: [
           {
@@ -375,19 +390,75 @@ export default {
             ],
             level: 1,
           },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 4 },
+            ],
+            level: 2,
+          },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 6 },
+            ],
+            level: 3,
+          },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 8 },
+            ],
+            level: 4,
+          },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 10 },
+            ],
+            level: 5,
+          },
         ],
       },
       flashInfra: {
         name: "infra_dome",
-        image: "infra_dome",
+        key: "infra_dome",
         workforce: 2,
         levels: [
           {
             bonus: [
-              { from: "direct", to: "sys_habitation", value: 8 },
-              { from: "direct", to: "sys_happiness", value: 12 },
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 2 },
             ],
             level: 1,
+          },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 4 },
+            ],
+            level: 2,
+          },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 6 },
+            ],
+            level: 3,
+          },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 8 },
+            ],
+            level: 4,
+          },
+          {
+            bonus: [
+              { from: "direct", to: "sys_habitation", value: 10 },
+              { from: "direct", to: "sys_happiness", value: 10 },
+            ],
+            level: 5,
           },
         ],
       },
@@ -453,6 +524,7 @@ export default {
         this.system.planets[0].buildings.push({
           building: this.emptyBuilding,
           hover: false,
+          level: 1,
         });
       }
       this.system.planets[1].buildings.push({
@@ -465,12 +537,14 @@ export default {
         this.system.planets[1].buildings.push({
           building: this.emptyBuilding,
           hover: false,
+          level: 1,
         });
       }
       for (let i = 0; i < 3; i++) {
         this.system.planets[2].buildings.push({
           building: this.emptyBuilding,
           hover: false,
+          level: 1,
         });
       }
     },
@@ -495,6 +569,7 @@ export default {
         emptyBuildings.push({
           building: this.infra,
           hover: false,
+          level: 1,
         });
         this.system.workforce += 2;
         await this.addBonusValue(
@@ -513,6 +588,7 @@ export default {
         this.system.planets[newPlanetId].buildings.push({
           building: this.emptyBuilding,
           hover: false,
+          level: 1,
         });
       }
     },
@@ -530,9 +606,11 @@ export default {
           this.system.planets[i].buildings.forEach((build) => {
             this.system.workforce -= build.building.workforce;
             if (build.building.levels !== undefined) {
-              build.building.levels[0].bonus.forEach(async (bonus) => {
-                await this.addBonusValue(bonus, i, true);
-              });
+              build.building.levels[build.level - 1].bonus.forEach(
+                async (bonus) => {
+                  await this.addBonusValue(bonus, i, true);
+                }
+              );
             }
           });
           this.system.planets.splice(i, 1);
@@ -546,18 +624,22 @@ export default {
     // Set the building on the currently selected tile
     async setBuilding(building, planetId, tileId) {
       if (planetId !== -1) {
-        let currBuilding =
-          this.system.planets[planetId].buildings[tileId].building;
+        let currBuilding = this.system.planets[planetId].buildings[tileId];
         if (currBuilding.name !== "Empty") {
-          if (currBuilding.levels !== undefined) {
-            currBuilding.levels[0].bonus.forEach(async (bonus) => {
-              await this.addBonusValue(bonus, planetId, true);
-            });
+          if (currBuilding.building.levels !== undefined) {
+            currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
+              async (bonus) => {
+                await this.addBonusValue(bonus, planetId, true);
+              }
+            );
           }
         }
-        this.system.workforce -= currBuilding.workforce;
+        this.system.planets[planetId].buildings[tileId].level = 1;
+
+        this.system.workforce -= currBuilding.building.workforce;
         this.system.planets[planetId].buildings[tileId].building = building;
         this.system.workforce += building.workforce;
+        this.system.planets[planetId].buildings[tileId].level = 1;
         if (building.levels !== undefined) {
           building.levels[0].bonus.forEach(async (bonus) => {
             await this.addBonusValue(bonus, planetId, false);
@@ -627,15 +709,15 @@ export default {
           this.updateFromBodyPop(planetIndex, valueToAssign);
           this.system.habitation += valueToAssign;
           this.system.happiness =
-            Math.round((this.system.happiness - valueToAssign) * 10) / 10;
+            Math.round((this.system.happiness - valueToAssign) * 100) / 100;
           this.system.planets[planetIndex].planetHabitation += valueToAssign;
 
           if (!this.dominion && this.gameSpeed !== "flash") {
             this.system.defense -= this.system.defFromHabitation;
             this.system.defFromHabitation =
               Math.round(
-                this.system.habitation * 0.15 * this.system.defBonus * 10
-              ) / 10;
+                this.system.habitation * 0.15 * this.system.defBonus * 100
+              ) / 100;
             this.system.defense += this.system.defFromHabitation;
           }
 
@@ -647,39 +729,49 @@ export default {
           break;
         case "sys_happiness":
           this.system.happiness =
-            Math.round((this.system.happiness + valueToAssign) * 10) / 10;
+            Math.round((this.system.happiness + valueToAssign) * 100) / 100;
           break;
         case "sys_production":
-          this.system.production += valueToAssign;
+          this.system.production =
+            Math.round((this.system.production + valueToAssign) * 100) / 100;
           break;
         case "sys_ideology":
-          this.system.ideology += valueToAssign;
+          this.system.ideology =
+            Math.round((this.system.ideology + valueToAssign) * 100) / 100;
           break;
         case "sys_credit":
-          this.system.credit += valueToAssign;
+          this.system.credit =
+            Math.round((this.system.credit + valueToAssign) * 100) / 100;
           break;
         case "sys_technology":
-          this.system.technology += valueToAssign;
+          this.system.technology =
+            Math.round((this.system.technology + valueToAssign) * 100) / 100;
           break;
         case "sys_mobility":
+          this.updateFromSysMobi(planetIndex, valueToAssign);
           this.system.credit += this.system.habitation * valueToAssign * 0.1;
-          this.system.credit = Math.round(this.system.credit * 10) / 10;
-          this.system.mobility += valueToAssign;
+          this.system.credit = Math.round(this.system.credit * 100) / 100;
+          this.system.mobility =
+            Math.round((this.system.mobility + valueToAssign) * 100) / 100;
           break;
         case "sys_defense":
           this.system.defense =
             Math.round(
-              (valueToAssign * this.system.defBonus + this.system.defense) * 10
-            ) / 10;
+              (valueToAssign * this.system.defBonus + this.system.defense) * 100
+            ) / 100;
           break;
         case "sys_remove_contact":
-          this.system.remove_contact += valueToAssign;
+          this.system.remove_contact =
+            Math.round((this.system.remove_contact + valueToAssign) * 100) /
+            100;
           break;
         case "sys_ci":
-          this.system.ci += valueToAssign;
+          this.system.ci =
+            Math.round((this.system.ci + valueToAssign) * 100) / 100;
           break;
         case "sys_radar":
-          this.system.radar += valueToAssign;
+          this.system.radar =
+            Math.round((this.system.radar + valueToAssign) * 100) / 100;
           break;
 
         default:
@@ -703,6 +795,23 @@ export default {
             );
           }
         });
+      }
+    },
+    updateFromSysMobi(planetId, addedMobi) {
+      for (let i = 1; i < this.system.planets.length; i++) {
+        for (let j = 0; j < this.system.planets[i].buildings.length; j++) {
+          this.system.planets[i].buildings[j].building.levels[0].bonus.forEach(
+            async (bon) => {
+              if (bon.from === "sys_mobility") {
+                await this.addBonusValue(
+                  { from: "direct", to: bon.to, value: bon.value * addedMobi },
+                  planetId,
+                  false
+                );
+              }
+            }
+          );
+        }
       }
     },
     async setStartingSystem() {
@@ -743,6 +852,33 @@ export default {
           0,
           false
         );
+      }
+    },
+    levelBuilding(planetId, tileId, up) {
+      let currBuilding = this.system.planets[planetId].buildings[tileId];
+      if (currBuilding.building.name !== "Empty") {
+        let upDown = 1;
+        if (!up) {
+          upDown = -1;
+        }
+        if (
+          !(currBuilding.level === 1 && upDown === -1) &&
+          !(currBuilding.level === 5 && upDown === 1)
+        ) {
+          currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
+            async (bon) => {
+              console.log(bon);
+              await this.addBonusValue(bon, planetId, true);
+            }
+          );
+          currBuilding.level += upDown;
+          currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
+            async (bon) => {
+              console.log(bon);
+              await this.addBonusValue(bon, planetId, false);
+            }
+          );
+        }
       }
     },
     // Select a tile and display corresponding building list
@@ -926,8 +1062,8 @@ export default {
             for (var buildLine in buildListToSearch) {
               for (var building in buildListToSearch[buildLine].buildings) {
                 if (
-                  buildListToSearch[buildLine].buildings[building].image ===
-                  this.system.planets[planetId].buildings[i].building.image
+                  buildListToSearch[buildLine].buildings[building].key ===
+                  this.system.planets[planetId].buildings[i].building.key
                 ) {
                   correspondingBuilding =
                     buildListToSearch[buildLine].buildings[building];
