@@ -580,16 +580,10 @@ export default {
       }
       for (var i = this.system.planets.length - 1; i >= 0; --i) {
         if (this.system.planets[i].planetId == delPlanetId) {
-          this.system.planets[i].buildings.forEach((build) => {
-            this.system.workforce -= build.building.workforce;
-            if (build.building.levels !== undefined) {
-              build.building.levels[build.level - 1].bonus.forEach(
-                async (bonus) => {
-                  await this.addBonusValue(bonus, i, true);
-                }
-              );
-            }
-          });
+          for (var build in this.system.planets[i].buildings) {
+            this.setBuilding(this.emptyBuilding, delPlanetId, build);
+          }
+
           this.system.planets.splice(i, 1);
           for (var j = i; j < this.system.planets.length; j++) {
             this.system.planets[j].planetId--;
@@ -618,18 +612,18 @@ export default {
       }
       if (planetId !== -1) {
         let currBuilding = this.system.planets[planetId].buildings[tileId];
-        if (currBuilding.name !== "Empty") {
+        if (currBuilding.building.name !== "Empty") {
+          if (currBuilding.building.limitation === "unique_system") {
+            this.system.uniqueBuildings.splice(
+              this.system.uniqueBuildings.indexOf(currBuilding.key),
+              1
+            );
+          }
           if (currBuilding.building.levels !== undefined) {
             currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
               async (bonus) => {
                 await this.addBonusValue(bonus, planetId, true);
               }
-            );
-          }
-          if (currBuilding.limitation === "unique_system") {
-            this.system.uniqueBuildings.splice(
-              this.system.uniqueBuildings.indexOf(currBuilding.key),
-              1
             );
           }
         }
@@ -646,6 +640,7 @@ export default {
         }
       }
     },
+    // Remove building on given planet and tile
     async deleteBuilding(planetId, tileId) {
       let currBuilding =
         this.system.planets[planetId].buildings[tileId].building;
@@ -659,13 +654,8 @@ export default {
         }
         this.firstClick = true;
       }
-      if (currBuilding.limitation === "unique_system") {
-        await this.system.uniqueBuildings.splice(
-          this.system.uniqueBuildings.indexOf(currBuilding.key),
-          1
-        );
-      }
     },
+    // Add values from a bonus to the system values
     async addBonusValue(buildingBonuses, planetIndex, substractValues) {
       if (substractValues) {
         buildingBonuses.value *= -1;
@@ -702,7 +692,10 @@ export default {
           break;
         case "sys_defense":
           if (!substractValues) {
-            this.system.defense += bonus.value * this.system.defense;
+            this.system.defense =
+              Math.round(
+                (this.system.defense + bonus.value * this.system.defense) * 100
+              ) / 100;
             this.system.defBonus = 1 + bonus.value;
             this.system.defFromHabitation *= this.system.defBonus;
             return;
@@ -730,7 +723,10 @@ export default {
               Math.round(
                 this.system.habitation * 0.15 * this.system.defBonus * 100
               ) / 100;
-            this.system.defense += this.system.defFromHabitation;
+            this.system.defense =
+              Math.round(
+                (this.system.defense + this.system.defFromHabitation) * 100
+              ) / 100;
           }
 
           this.system.credit +=
@@ -794,6 +790,7 @@ export default {
         buildingBonuses.value *= -1;
       }
     },
+    // Update buildings using body_pop
     updateFromBodyPop(planetId, addedPop) {
       for (let i = 1; i < this.system.planets[planetId].buildings.length; i++) {
         let currBuilding = this.system.planets[planetId].buildings[i];
@@ -810,6 +807,7 @@ export default {
         );
       }
     },
+    // Update buildings using sys_mobility
     updateFromSysMobi(planetId, addedMobi) {
       for (let i = 1; i < this.system.planets.length; i++) {
         for (let j = 0; j < this.system.planets[i].buildings.length; j++) {
