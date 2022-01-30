@@ -59,23 +59,17 @@ buildingFull.forEach((building) => {
                 let value
                 let bonusNumber = parseInt(bon) + 1
                 if (level === 1) {
-                    value = parseFloat(building["b" + bonusNumber + " min"])
+                    value = building["b" + bonusNumber + " min"]
                 }
                 else {
                     // if (building["b" + bonusNumber + " f()"] !== "") {
                     if (building["b" + bonusNumber + " f()"] === "l2" || building["b" + bonusNumber + " f()"] === "l0")
-                        value = parseFloat(building["b" + bonusNumber + " min"]) + (parseFloat(building["b" + bonusNumber + " max"]) - parseFloat(building["b" + bonusNumber + " min"])) * parseFloat(fns[building["b" + bonusNumber + " f()"]][level - 1]) / 100
+                        value = building["b" + bonusNumber + " min"] + (building["b" + bonusNumber + " max"] - building["b" + bonusNumber + " min"]) * fns[building["b" + bonusNumber + " f()"]][level - 1] / 100
                     else
-                        value = (parseFloat(building["b" + bonusNumber + " max"])) * parseFloat(fns[building["b" + bonusNumber + " f()"]][level - 1]) / 100
+                        value = building["b" + bonusNumber + " max"] * fns[building["b" + bonusNumber + " f()"]][level - 1] / 100
 
                     value = parseFloat(value.toFixed(building["b" + bonusNumber + " f()"].slice(-1)))
 
-                    // if (building.Name == "Industrial Hub")
-                    //     console.log(value)
-                    // bonusList[bon].value = value
-                    // newBuilding.levels.push({ bonus: [{ from: bonusList[bon].from, to: bonusList[bon].to, value: value }], level: level })
-                    // newBuilding.levels[level - 2].bonus.value = value
-                    // console.log(value)
                 }
                 bonusL.push({ from: bonusList[bon].from, to: bonusList[bon].to, value: value })
             }
