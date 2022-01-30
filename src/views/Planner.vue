@@ -482,6 +482,7 @@ export default {
         ],
         uniqueBuildings: [],
       },
+      firstClick: true,
     };
   },
   methods: {
@@ -655,6 +656,7 @@ export default {
             this.setBuilding(this.emptyBuilding, planetId, tile);
           }
         }
+        this.firstClick = true;
       }
       if (currBuilding.limitation === "unique_system") {
         await this.system.uniqueBuildings.splice(
@@ -917,10 +919,14 @@ export default {
         this.setSelectedTileButton("slot" + planetId + "_" + tileId);
       } else {
         if (
-          this.system.planets[planetId].buildings[0].building.name === "Empty"
+          this.system.planets[planetId].buildings[0].building.name ===
+            "Empty" &&
+          this.firstClick === false
         ) {
           // console.log("a");
           this.setBuilding(this.infra, planetId, 0);
+        } else {
+          this.firstClick = false;
         }
       }
     },
