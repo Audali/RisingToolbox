@@ -25,6 +25,7 @@
           ref="flash"
           @click="setGameSpeed('flash')"
           style="margin-left: 1rem"
+          disabled="true"
         >
           FLASH
         </button>
