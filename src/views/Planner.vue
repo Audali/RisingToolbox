@@ -1,5 +1,6 @@
 <template>
   <div class="card">
+    <h2>{{ $t("plannerWarning") }}</h2>
     <div>
       <input
         type="checkbox"
