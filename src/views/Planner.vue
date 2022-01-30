@@ -793,23 +793,25 @@ export default {
     },
     updateFromBodyPop(planetId, addedPop) {
       for (let i = 1; i < this.system.planets[planetId].buildings.length; i++) {
-        this.system.planets[planetId].buildings[
-          i
-        ].building.levels[0].bonus.forEach(async (bon) => {
-          if (bon.from === "body_pop") {
-            await this.addBonusValue(
-              { from: "direct", to: bon.to, value: bon.value * addedPop },
-              planetId,
-              false
-            );
+        let currBuilding = this.system.planets[planetId].buildings[i];
+        currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
+          async (bon) => {
+            if (bon.from === "body_pop") {
+              await this.addBonusValue(
+                { from: "direct", to: bon.to, value: bon.value * addedPop },
+                planetId,
+                false
+              );
+            }
           }
-        });
+        );
       }
     },
     updateFromSysMobi(planetId, addedMobi) {
       for (let i = 1; i < this.system.planets.length; i++) {
         for (let j = 0; j < this.system.planets[i].buildings.length; j++) {
-          this.system.planets[i].buildings[j].building.levels[0].bonus.forEach(
+          let currBuilding = this.system.planets[i].buildings[j];
+          currBuilding.building.levels[currBuilding.level - 1].bonus.forEach(
             async (bon) => {
               if (bon.from === "sys_mobility") {
                 await this.addBonusValue(
