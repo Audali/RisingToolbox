@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px"
+	 height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+<g id="cadre_x5F_open">
+</g>
+<g id="cadre_x5F_dome">
+</g>
+<g id="cadre_x5F_orbital">
+</g>
+<g id="infra_x5F_open">
+</g>
+<g id="infra_x5F_dome">
+</g>
+<g id="mine_x5F_dome">
+</g>
+<g id="mine_x5F_orbital">
+</g>
+<g id="hab_x5F_open">
+</g>
+<g id="hab_x5F_dome">
+</g>
+<g id="hab_x5F_open_x5F_poor">
+</g>
+<g id="hab_x5F_open_x5F_rich">
+</g>
+<g id="factory_x5F_open">
+</g>
+<g id="factory_x5F_orbital">
+</g>
+<g id="hight_x5F_factory_x5F_dome">
+	<rect x="10" y="15" width="3" height="13"/>
+	<path d="M11.5,13c0,0,1.5,0,1.5,1h-3C10,13,11.5,13,11.5,13z"/>
+	<rect x="6" y="21" width="3" height="7"/>
+	<path d="M7.5,19C8.25,19,9,19,9,20H6C6,19,6.75,19,7.5,19z"/>
+	<path d="M14,19c1-1,2-1,4.5-1s3.5,0,4.5,1v1h-9V19z"/>
+	<rect x="13" y="23" width="1" height="1"/>
+	<rect x="9" y="23" width="1" height="1"/>
+	<path d="M25,23h-2v1h2v4h1v-4.286C26,23.714,26,23,25,23z"/>
+	<path d="M11.5,13"/>
+	<path d="M11.5,13"/>
+	<path d="M13,12h-1v-2c0.01-0.124,0.091-0.798,0.646-1.354s1.229-0.637,1.305-0.644L16,8c0.293,0,0.766-0.473,1.146-0.854l0.08-0.08
+		C17.606,6.688,18,6.295,18,6V4h1v2c0,0.711-0.543,1.252-1.068,1.775l-0.079,0.078C17.29,8.417,16.707,9,16,9h-1.996
+		c0.012,0.002-0.358,0.062-0.65,0.354c-0.306,0.306-0.356,0.697-0.356,0.701L13,12z"/>
+	<path d="M11,12h-1V9c0-0.708,0.561-1.269,1.104-1.811C11.71,6.583,12.293,6,13,6h1.997c-0.012-0.002,0.352-0.056,0.65-0.354
+		c0.31-0.31,0.355-0.686,0.355-0.689L16,4h1v1c-0.008,0.117-0.081,0.788-0.646,1.354s-1.236,0.638-1.311,0.645L13,7
+		c-0.293,0-0.766,0.473-1.146,0.854C11.431,8.276,11,8.707,11,9V12z"/>
+	<g>
+		<rect x="16" y="23" width="1" height="1"/>
+		<rect x="16" y="21" width="1" height="1"/>
+		<rect x="16" y="25" width="1" height="1"/>
+		<rect x="14" y="21" width="1" height="7"/>
+		<rect x="18" y="21" width="5" height="7"/>
+		<rect x="16" y="27" width="1" height="1"/>
+	</g>
+	<g id="Dome_13_">
+		<polygon points="8.5,32 0,32 0,23.5 1,23.5 1,31 8.5,31 		"/>
+		<rect x="14.269" y="31" width="3.461" height="1"/>
+		<polygon points="32,32 23.5,32 23.5,31 31,31 31,23.5 32,23.5 		"/>
+		<rect x="31" y="14.27" width="1" height="3.461"/>
+		<polygon points="32,8.5 31,8.5 31,1 23.5,1 23.5,0 32,0 		"/>
+		<rect x="14.27" width="3.461" height="1"/>
+		<polygon points="1,8.5 0,8.5 0,0 8.5,0 8.5,1 1,1 		"/>
+		<rect y="14.269" width="1" height="3.461"/>
+	</g>
+</g>
+<g id="lift_x5F_open">
+</g>
+<g id="lift_x5F_dome">
+</g>
+<g id="university_x5F_open">
+</g>
+<g id="research_x5F_open">
+</g>
+<g id="research_x5F_dome">
+</g>
+<g id="research_x5F_orbital">
+</g>
+<g id="ideo_x5F_open">
+</g>
+<g id="ideo_x5F_dome">
+</g>
+<g id="monument_x5F_open">
+</g>
+<g id="monument_x5F_dome">
+</g>
+<g id="ideo_x5F_credit_x5F_open">
+</g>
+<g id="market_x5F_open">
+</g>
+<g id="market_x5F_dome">
+</g>
+<g id="finance_x5F_open">
+</g>
+<g id="finance_x5F_orbital">
+</g>
+<g id="spatioport_x5F_open">
+</g>
+<g id="spatioport_x5F_dome">
+</g>
+<g id="spatioport_x5F_orbital">
+</g>
+<g id="defense_x5F_global_x5F_dome">
+</g>
+<g id="defense_x5F_local_x5F_open">
+</g>
+<g id="defense_x5F_local_x5F_dome">
+</g>
+<g id="defense_x5F_local_x5F_orbital">
+</g>
+<g id="happy_x5F_pot_x5F_open">
+</g>
+<g id="happy_x5F_pot_x5F_dome">
+</g>
+<g id="happy_x5F_pot_x5F_orbital">
+</g>
+<g id="happy_x5F_open">
+</g>
+<g id="happy_x5F_orbital">
+</g>
+<g id="shipyard_x5F_1_x5F_orbital">
+</g>
+<g id="shipyard_x5F_2_x5F_orbital">
+</g>
+<g id="shipyard_x5F_3_x5F_orbital">
+</g>
+<g id="shipyard_x5F_4_x5F_orbital">
+</g>
+<g id="military_x5F_school_x5F_dome">
+</g>
+<g id="radar_x5F_orbital">
+</g>
+<g id="counterintelligence_x5F_open">
+</g>
+<g id="removecontact_x5F_open">
+	<g id="cadre_x5F_open_-_copie_36_11_">
+	</g>
+</g>
+<g id="removecontact_x5F_dome">
+</g>
+<g id="hypergate">
+</g>
+<g id="cadre_x5F_brevet">
+</g>
+<g id="cadre_x5F_lex">
+</g>
+<g id="_x30_0_x5F_galaxy">
+</g>
+<g id="_x30_0_x5F_vision">
+</g>
+</svg>
